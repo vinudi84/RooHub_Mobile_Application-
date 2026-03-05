@@ -1,10 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    android:background="#F5F5F5">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- TOP BAR -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#C62828"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:hint="Search Art..."
+            android:background="#FFFFFF"
+            android:padding="10dp"/>
+
+        <ImageView
+            android:id="@+id/btnNotification"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/ic_notification"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <ImageView
+            android:id="@+id/btnUpload"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/ic_upload"
+            android:clickable="true"
+            android:focusable="true"/>
+
+
+
+    </LinearLayout>
+
+
+    <!-- CATEGORY SCROLL -->
+    <HorizontalScrollView
+        android:id="@+id/categoryScroll"
+        android:layout_below="@id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <Button
+                android:id="@+id/btnColorArt"
+                android:layout_width="99dp"
+                android:layout_height="37dp"
+                android:layout_margin="8dp"
+                android:background="#C62828"
+                android:text="Color Art"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnPenArt"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_margin="8dp"
+                android:background="#E53935"
+                android:text="Pen Art"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnPencilArt"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_margin="8dp"
+                android:background="#C62828"
+                android:text="Pencil Art"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnAnimationArt"
+                android:layout_width="114dp"
+                android:layout_height="36dp"
+                android:layout_margin="8dp"
+                android:background="#E53935"
+                android:text="Animation"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnAnimalArt"
+                android:layout_width="121dp"
+                android:layout_height="36dp"
+                android:layout_margin="8dp"
+                android:background="#C62828"
+                android:text="Animal Art"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnNatureArt"
+                android:layout_width="134dp"
+                android:layout_height="36dp"
+                android:layout_margin="8dp"
+                android:background="#E53935"
+                android:text="Nature Art"
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+    <!-- TITLE -->
+    <TextView
+        android:id="@+id/txtGallery"
+        android:layout_below="@id/categoryScroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Art Gallery"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="80dp"
+        android:textColor="#C62828"/>
+
+
+    <!-- BOTTOM NAVIGATION -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#C62828"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <ImageView
+            android:id="@+id/btnHome"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_home"
+            android:padding="10dp"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <ImageView
+            android:id="@+id/btnCourse"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_course"
+            android:padding="10dp"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <ImageView
+            android:id="@+id/btnUploadBottom"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_upload"
+            android:padding="10dp"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <ImageView
+            android:id="@+id/btnProfile"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_profile"
+            android:padding="10dp"
+            android:clickable="true"
+            android:focusable="true"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
