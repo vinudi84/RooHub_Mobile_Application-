@@ -12,33 +12,40 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
-        <activity
-            android:name=".CourseActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CourseViewActivity"
-            android:exported="false" />
+
+        <!-- Course Activity -->
+<!--        <activity-->
+<!--            android:name=".CourseActivity"-->
+<!--            android:exported="false" />-->
+
+        <!-- Other Activities -->
+
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
+
         <activity
             android:name=".UploadActivity"
             android:exported="false" />
+
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
+
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
+
+        <!-- Launcher Activity -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".CourseActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

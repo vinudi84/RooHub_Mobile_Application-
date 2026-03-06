@@ -5,6 +5,14 @@
     <string name="hint_password">Password</string>
     <string name="btn_register">Register</string>
     <string name="login_link">Already have an account? Login</string>
+    <string name="art_courses">Art Courses</string>
+    <string name="color_art">Color Art</string>
+    <string name="pen_art">Pen Art</string>
+    <string name="pencil_art">Pencil Art</string>
+    <string name="animation">Animation</string>
+    <string name="animal_art">Animal Art</string>
+    <string name="natural_art">Natural Art</string>
+
     <string-array name="user_types">
         <item>Student</item>
         <item>Teacher</item>

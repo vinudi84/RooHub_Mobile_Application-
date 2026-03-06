@@ -1,25 +1,44 @@
 package com.example.roohub;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class CourseActivity extends AppCompatActivity {
+
+    Button colorArt, penArt, pencilArt, animation, animal, natural;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
+        colorArt = findViewById(R.id.btnColorArt);
+        penArt = findViewById(R.id.btnPenArt);
+        pencilArt = findViewById(R.id.btnPencilArt);
+        animation = findViewById(R.id.btnAnimation);
+        animal = findViewById(R.id.btnAnimal);
+        natural = findViewById(R.id.btnNatural);
+
+        colorArt.setOnClickListener(v ->
+                Toast.makeText(this,"Color Art Course",Toast.LENGTH_SHORT).show());
+
+        penArt.setOnClickListener(v ->
+                Toast.makeText(this,"Pen Art Course",Toast.LENGTH_SHORT).show());
+
+        pencilArt.setOnClickListener(v ->
+                Toast.makeText(this,"Pencil Art Course",Toast.LENGTH_SHORT).show());
+
+        animation.setOnClickListener(v ->
+                Toast.makeText(this,"Animation Course",Toast.LENGTH_SHORT).show());
+
+        animal.setOnClickListener(v ->
+                Toast.makeText(this,"Animal Art Course",Toast.LENGTH_SHORT).show());
+
+        natural.setOnClickListener(v ->
+                Toast.makeText(this,"Natural Art Course",Toast.LENGTH_SHORT).show());
     }
 }
