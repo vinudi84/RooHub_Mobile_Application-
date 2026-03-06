@@ -14,9 +14,9 @@
         tools:targetApi="31">
 
         <!-- Course Activity -->
-<!--        <activity-->
-<!--            android:name=".CourseActivity"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".CourseActivity"
+            android:exported="false" />
 
         <!-- Other Activities -->
 
@@ -38,7 +38,7 @@
 
         <!-- Launcher Activity -->
         <activity
-            android:name=".CourseActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
