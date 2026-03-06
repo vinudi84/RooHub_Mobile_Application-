@@ -1,24 +1,48 @@
 package com.example.roohub;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class HomeActivity extends AppCompatActivity {
+
+    // Variables - ID වලට ගැලපෙන පරිදි
+    ImageView notification, logout;
+    ImageButton upload;
+    LinearLayout profile, course;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        // XML එකේ නම activity_home.xml විය යුතුයි
         setContentView(R.layout.activity_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        // XML එකේ ID සමඟ සම්බන්ධ කිරීම
+        notification = findViewById(R.id.btnNotification);
+        logout = findViewById(R.id.btnLogout);
+        upload = findViewById(R.id.btnUpload);
+        profile = findViewById(R.id.btnProfile);
+        course = findViewById(R.id.btnCourse);
+
+        // Click Listeners
+        notification.setOnClickListener(v ->
+                startActivity(new Intent(HomeActivity.this, NotificationActivity.class)));
+
+        upload.setOnClickListener(v ->
+                startActivity(new Intent(HomeActivity.this, UploadActivity.class)));
+
+        profile.setOnClickListener(v ->
+                startActivity(new Intent(HomeActivity.this, ProfileActivity.class)));
+
+        course.setOnClickListener(v ->
+                startActivity(new Intent(HomeActivity.this, CourseActivity.class)));
+
+        logout.setOnClickListener(v ->
+                startActivity(new Intent(HomeActivity.this, LoginActivity.class)));
     }
 }
