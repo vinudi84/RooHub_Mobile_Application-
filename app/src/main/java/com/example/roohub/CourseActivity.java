@@ -15,6 +15,7 @@ public class CourseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
+        getSupportActionBar().hide();
 
         colorArt = findViewById(R.id.btnColorArt);
         penArt = findViewById(R.id.btnPenArt);
