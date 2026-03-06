@@ -19,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
 
         btnLogin = findViewById(R.id.btnLogin);
         txtRegister = findViewById(R.id.txtRegister);
