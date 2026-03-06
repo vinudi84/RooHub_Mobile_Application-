@@ -1,188 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#F8F9FA">
 
-    <!-- TOP BAR -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#C62828"
+        android:layout_height="80dp"
+        android:background="#FF4B6C"
         android:gravity="center_vertical"
-        android:padding="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingHorizontal="15dp">
 
         <EditText
-            android:id="@+id/searchBar"
+            android:id="@+id/searchArt"
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
+            android:background="@drawable/search_bg"
             android:hint="Search Art..."
-            android:background="#FFFFFF"
-            android:padding="10dp"/>
+            android:paddingStart="15dp"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="10dp"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/btnNotification"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/ic_notification"
-            android:clickable="true"
-            android:focusable="true"/>
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_bell"
+            app:tint="@android:color/white" />
 
         <ImageView
-            android:id="@+id/btnUpload"
+            android:id="@+id/btnLogout"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/ic_upload"
-            android:clickable="true"
-            android:focusable="true"/>
-
-
-
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_logout"
+            app:tint="@android:color/white" />
     </LinearLayout>
 
-
-    <!-- CATEGORY SCROLL -->
-    <HorizontalScrollView
-        android:id="@+id/categoryScroll"
-        android:layout_below="@id/topBar"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF">
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigation"
+        android:layout_below="@id/topBar">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:orientation="vertical"
+            android:padding="15dp">
 
-            <Button
-                android:id="@+id/btnColorArt"
-                android:layout_width="99dp"
-                android:layout_height="37dp"
-                android:layout_margin="8dp"
-                android:background="#C62828"
-                android:text="Color Art"
-                android:textColor="#FFFFFF" />
-
-            <Button
-                android:id="@+id/btnPenArt"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_margin="8dp"
-                android:background="#E53935"
-                android:text="Pen Art"
-                android:textColor="#FFFFFF" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Art Gallery"
+                android:textColor="#333333"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnPencilArt"
-                android:layout_width="wrap_content"
-                android:layout_height="37dp"
-                android:layout_margin="8dp"
-                android:background="#C62828"
-                android:text="Pencil Art"
-                android:textColor="#FFFFFF" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="4dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnAnimationArt"
-                android:layout_width="114dp"
-                android:layout_height="36dp"
-                android:layout_margin="8dp"
-                android:background="#E53935"
-                android:text="Animation"
-                android:textColor="#FFFFFF" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sample_art" />
 
-            <Button
-                android:id="@+id/btnAnimalArt"
-                android:layout_width="121dp"
-                android:layout_height="36dp"
-                android:layout_margin="8dp"
-                android:background="#C62828"
-                android:text="Animal Art"
-                android:textColor="#FFFFFF" />
-
-            <Button
-                android:id="@+id/btnNatureArt"
-                android:layout_width="134dp"
-                android:layout_height="36dp"
-                android:layout_margin="8dp"
-                android:background="#E53935"
-                android:text="Nature Art"
-                android:textColor="#FFFFFF" />
-
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-    </HorizontalScrollView>
+    </ScrollView>
 
-
-    <!-- TITLE -->
-    <TextView
-        android:id="@+id/txtGallery"
-        android:layout_below="@id/categoryScroll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Art Gallery"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginTop="80dp"
-        android:textColor="#C62828"/>
-
-
-    <!-- BOTTOM NAVIGATION -->
     <LinearLayout
-        android:id="@+id/bottomNav"
-        android:layout_alignParentBottom="true"
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#C62828"
-        android:orientation="horizontal"
-        android:weightSum="4">
+        android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:elevation="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/btnHome"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_home"
-            android:padding="10dp"
-            android:clickable="true"
-            android:focusable="true"/>
-
-        <ImageView
+        <LinearLayout
             android:id="@+id/btnCourse"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_course"
-            android:padding="10dp"
+            android:gravity="center"
             android:clickable="true"
-            android:focusable="true"/>
+            android:focusable="true"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_course" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Course"
+                android:textSize="12sp" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/btnUploadBottom"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+        <ImageButton
+            android:id="@+id/btnUpload"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/circle_upload_btn"
+            android:elevation="5dp"
             android:src="@drawable/ic_upload"
-            android:padding="10dp"
-            android:clickable="true"
-            android:focusable="true"/>
+            app:tint="@android:color/white" />
 
-        <ImageView
+        <LinearLayout
             android:id="@+id/btnProfile"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_profile"
-            android:padding="10dp"
+            android:gravity="center"
             android:clickable="true"
-            android:focusable="true"/>
-
+            android:focusable="true"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_profile" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textSize="12sp" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
