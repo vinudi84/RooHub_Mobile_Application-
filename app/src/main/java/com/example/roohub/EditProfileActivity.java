@@ -21,7 +21,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Button btnPickImage, btnSave;
     private Uri selectedImageUri;
 
-    // Gallery එකෙන් පින්තූරයක් තෝරා ගැනීම
+
     private final ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -44,7 +44,7 @@ public class EditProfileActivity extends AppCompatActivity {
         btnPickImage = findViewById(R.id.btnPickImage);
         btnSave = findViewById(R.id.btnSave);
 
-        // කලින් තිබුණු දත්ත තියෙනවා නම් ඒවා පෙන්වන්න (Optional)
+
         loadCurrentData();
 
         btnPickImage.setOnClickListener(v -> {
@@ -66,7 +66,7 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // SharedPreferences වල දත්ත ස්ථිරවම සේව් කිරීම
+
         SharedPreferences prefs = getSharedPreferences("UserProfile", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("NAME", name);
@@ -74,11 +74,11 @@ public class EditProfileActivity extends AppCompatActivity {
         if (selectedImageUri != null) {
             editor.putString("IMAGE_URI", selectedImageUri.toString());
         }
-        editor.apply(); // දත්ත සේව් වුණා
+        editor.apply();
 
         Toast.makeText(this, "Profile Updated!", Toast.LENGTH_SHORT).show();
 
-        // කෙලින්ම ProfileActivity එකට යනවා
+
         startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
         finish();
     }

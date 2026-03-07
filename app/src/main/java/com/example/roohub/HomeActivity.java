@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
             Glide.with(this).load(Uri.parse(imageUriString)).into(homeArtImage);
         }
 
-        // Navigation - Profile එකට යන පේළිය මෙන්න:
+
         profile.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
 
         upload.setOnClickListener(v -> startActivity(new Intent(this, UploadActivity.class)));

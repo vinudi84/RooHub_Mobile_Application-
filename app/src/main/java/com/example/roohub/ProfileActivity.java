@@ -26,7 +26,6 @@ public class ProfileActivity extends AppCompatActivity {
         displayProfileImage = findViewById(R.id.displayProfileImage);
         btnEditProfile = findViewById(R.id.btnEditProfile);
 
-        // සේව් කරපු දත්ත මෙතනදී Load කරනවා
         displayData();
 
         btnEditProfile.setOnClickListener(v -> {
@@ -34,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    // දත්ත පෙන්වන function එක වෙනම ලිව්වා (onResume එකේදීත් වැඩ කරන්න)
+
     private void displayData() {
         SharedPreferences prefs = getSharedPreferences("UserProfile", MODE_PRIVATE);
 
@@ -46,7 +45,6 @@ public class ProfileActivity extends AppCompatActivity {
         txtBio.setText(bio);
 
         if (imageUriStr != null) {
-            // Glide පාවිච්චි කිරීමෙන් Permission Error එන්නේ නැහැ
             Glide.with(this)
                     .load(Uri.parse(imageUriStr))
                     .placeholder(android.R.drawable.ic_menu_gallery)
@@ -57,6 +55,6 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        displayData(); // Edit කරලා ආපහු එද්දී දත්ත Update වෙන්න ඕනේ නිසා
+        displayData();
     }
 }
