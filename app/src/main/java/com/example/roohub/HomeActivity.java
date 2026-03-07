@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide; // Glide import කරන්න
+import com.bumptech.glide.Glide; 
 
 public class HomeActivity extends AppCompatActivity {
 
