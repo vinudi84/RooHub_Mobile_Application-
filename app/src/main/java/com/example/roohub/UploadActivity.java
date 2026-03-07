@@ -1,7 +1,10 @@
 package com.example.roohub;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.ArrayAdapter;
@@ -11,7 +14,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class UploadActivity extends AppCompatActivity {
 
@@ -23,6 +29,9 @@ public class UploadActivity extends AppCompatActivity {
     Uri imageUri;
 
     private static final int PICK_IMAGE = 1;
+
+    // For modern activity result API
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,82 +51,93 @@ public class UploadActivity extends AppCompatActivity {
 
         // Spinner values
         String[] types = {"Select Type", "Teacher", "Artist"};
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
                 types
         );
-
         spinnerType.setAdapter(adapter);
+
+        // Activity result launcher for gallery picker
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if(result.getResultCode() == RESULT_OK && result.getData() != null){
+                        imageUri = result.getData().getData();
+                        imagePreview.setImageURI(imageUri);
+                    }
+                }
+        );
 
         // Upload Image Button
         btnUploadImage.setOnClickListener(v -> {
-
-            Intent intent = new Intent(Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-            startActivityForResult(intent, PICK_IMAGE);
-
+            // Check permission
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+                        != PackageManager.PERMISSION_GRANTED){
+                    requestPermissions(new String[]{Manifest.permission.READ_MEDIA_IMAGES}, 100);
+                } else {
+                    openGallery();
+                }
+            } else {
+                if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED){
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+                } else {
+                    openGallery();
+                }
+            }
         });
 
         // Save Button
         btnSave.setOnClickListener(v -> {
-
             String name = etArtName.getText().toString();
             String description = etDescription.getText().toString();
             String type = spinnerType.getSelectedItem().toString();
 
-            if(name.isEmpty() || description.isEmpty()){
-                Toast.makeText(this,"Please fill all fields",Toast.LENGTH_SHORT).show();
+            if(name.isEmpty() || description.isEmpty() || type.equals("Select Type")){
+                Toast.makeText(this,"Please fill all fields and select type",Toast.LENGTH_SHORT).show();
             }
             else{
-
                 Toast.makeText(this,"Art Saved Successfully",Toast.LENGTH_SHORT).show();
 
                 // Go to HomeActivity
                 Intent intent = new Intent(UploadActivity.this, HomeActivity.class);
                 startActivity(intent);
-
                 finish();
             }
-
         });
 
         // Edit Button
         btnEdit.setOnClickListener(v -> {
-
             Toast.makeText(this,"Edit Mode Enabled",Toast.LENGTH_SHORT).show();
-
             etArtName.setEnabled(true);
             etDescription.setEnabled(true);
             spinnerType.setEnabled(true);
-
         });
 
         // Cancel Button
         btnCancel.setOnClickListener(v -> {
-
             Toast.makeText(this,"Upload Cancelled",Toast.LENGTH_SHORT).show();
-
             finish();
-
         });
-
     }
 
-    // Image Picker Result
+    // Open gallery method
+    private void openGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        imagePickerLauncher.launch(intent);
+    }
+
+    // Handle permission request result
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null){
-
-            imageUri = data.getData();
-            imagePreview.setImageURI(imageUri);
-
+        if(requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            openGallery();
+        } else {
+            Toast.makeText(this,"Permission Denied! Cannot select image.", Toast.LENGTH_SHORT).show();
         }
-
     }
 }
