@@ -8,18 +8,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.bumptech.glide.Glide; // Glide import කරන්න
+import com.bumptech.glide.Glide;
 
 public class HomeActivity extends AppCompatActivity {
 
     ImageView notification, logout;
     ImageButton upload;
     LinearLayout profile, course;
-
     ImageView homeArtImage;
     TextView homeArtName, homeArtType, homeArtDescription;
 
@@ -28,60 +24,37 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // UI Elements සම්බන්ධ කිරීම
+        // UI Elements
         notification = findViewById(R.id.btnNotification);
         logout = findViewById(R.id.btnLogout);
         upload = findViewById(R.id.btnUpload);
         profile = findViewById(R.id.btnProfile);
         course = findViewById(R.id.btnCourse);
-
         homeArtImage = findViewById(R.id.home_art_image);
         homeArtName = findViewById(R.id.home_art_name);
         homeArtType = findViewById(R.id.home_art_type);
         homeArtDescription = findViewById(R.id.home_art_description);
 
-        // SharedPreferences වලින් දත්ත ලබා ගැනීම
+        // Load Data
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String imageUriString = prefs.getString("last_uploaded_image", null);
-        String name = prefs.getString("last_art_name", "No Name");
-        String type = prefs.getString("last_art_type", "No Type");
-        String desc = prefs.getString("last_art_description", "No Description");
+        homeArtName.setText(prefs.getString("last_art_name", "No Art"));
+        homeArtType.setText(prefs.getString("last_art_type", "Unknown"));
+        homeArtDescription.setText(prefs.getString("last_art_description", "No description"));
 
-        // දත්ත UI එකට ඇතුළත් කිරීම
-        homeArtName.setText(name);
-        homeArtType.setText(type);
-        homeArtDescription.setText(desc);
-
-        // පින්තූරය පෙන්වීම (Crash එක නවත්වන ප්‍රධාන කොටස)
         if (imageUriString != null) {
-            Uri imageUri = Uri.parse(imageUriString);
-
-            // setImageURI වෙනුවට Glide පාවිච්චි කිරීමෙන් Permission Error එක එන්නේ නැහැ
-            Glide.with(this)
-                    .load(imageUri)
-                    .placeholder(android.R.drawable.ic_menu_gallery) // පින්තූරය load වෙනකම් පෙන්වන එකක්
-                    .error(android.R.drawable.stat_notify_error)    // load වුණේ නැත්නම් පෙන්වන එකක්
-                    .into(homeArtImage);
+            Glide.with(this).load(Uri.parse(imageUriString)).into(homeArtImage);
         }
 
-        // Navigation (බොත්තම් වල ක්‍රියාකාරිත්වය)
-        notification.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, NotificationActivity.class)));
+        // Navigation - Profile එකට යන පේළිය මෙන්න:
+        profile.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
 
-        upload.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, UploadActivity.class);
-            startActivity(intent);
-        });
-
-        profile.setOnClickListener(v -> {
-            // ProfileActivity එක තාම හදලා නැත්නම් EditProfileActivity එකට යවන්න පුළුවන්
-            startActivity(new Intent(HomeActivity.this, EditProfileActivity.class));
-        });
-
-        course.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, CourseActivity.class)));
+        upload.setOnClickListener(v -> startActivity(new Intent(this, UploadActivity.class)));
+        course.setOnClickListener(v -> startActivity(new Intent(this, CourseActivity.class)));
+        notification.setOnClickListener(v -> startActivity(new Intent(this, NotificationActivity.class)));
 
         logout.setOnClickListener(v -> {
-            // Logout වෙද්දී Login screen එකට ගිහින් කලින් තිබුණු Activity ටික අයින් කරනවා
-            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();

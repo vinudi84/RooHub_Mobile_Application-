@@ -1,12 +1,14 @@
 package com.example.roohub;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import com.bumptech.glide.Glide;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -24,22 +26,37 @@ public class ProfileActivity extends AppCompatActivity {
         displayProfileImage = findViewById(R.id.displayProfileImage);
         btnEditProfile = findViewById(R.id.btnEditProfile);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String name = extras.getString("NAME");
-            String bio = extras.getString("BIO");
-            String imageUriString = extras.getString("IMAGE_URI");
-
-            if (name != null) txtFullName.setText(name);
-            if (bio != null) txtBio.setText(bio);
-            if (imageUriString != null) {
-                displayProfileImage.setImageURI(Uri.parse(imageUriString));
-            }
-        }
+        // සේව් කරපු දත්ත මෙතනදී Load කරනවා
+        displayData();
 
         btnEditProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
         });
+    }
+
+    // දත්ත පෙන්වන function එක වෙනම ලිව්වා (onResume එකේදීත් වැඩ කරන්න)
+    private void displayData() {
+        SharedPreferences prefs = getSharedPreferences("UserProfile", MODE_PRIVATE);
+
+        String name = prefs.getString("NAME", "Your Name Here");
+        String bio = prefs.getString("BIO", "No bio added yet.");
+        String imageUriStr = prefs.getString("IMAGE_URI", null);
+
+        txtFullName.setText(name);
+        txtBio.setText(bio);
+
+        if (imageUriStr != null) {
+            // Glide පාවිච්චි කිරීමෙන් Permission Error එන්නේ නැහැ
+            Glide.with(this)
+                    .load(Uri.parse(imageUriStr))
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .into(displayProfileImage);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        displayData(); // Edit කරලා ආපහු එද්දී දත්ත Update වෙන්න ඕනේ නිසා
     }
 }
