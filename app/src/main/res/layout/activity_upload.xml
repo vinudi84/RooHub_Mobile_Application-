@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/uploadPage"
     android:layout_width="match_parent"
@@ -15,6 +14,7 @@
         android:padding="20dp"
         android:elevation="6dp">
 
+        <!-- Page Title -->
         <TextView
             android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
@@ -26,6 +26,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp" />
 
+        <!-- Image Preview -->
         <ImageView
             android:id="@+id/imagePreview"
             android:layout_width="match_parent"
@@ -36,16 +37,16 @@
             android:padding="6dp"
             android:layout_marginBottom="10dp" />
 
-        <Button
-            android:id="@+id/btnUploadImage"
+        <!-- Spinner: Teacher / Artist -->
+        <Spinner
+            android:id="@+id/spinnerType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Upload Image"
-            android:backgroundTint="#6D6875"
-            android:textColor="#FFFFFF"
-            android:layout_marginTop="10dp"
-            android:padding="12dp" />
+            android:layout_marginTop="15dp"
+            android:background="#F5F5F5"
+            android:padding="10dp" />
 
+        <!-- Art Name -->
         <EditText
             android:id="@+id/etArtName"
             android:layout_width="match_parent"
@@ -56,6 +57,7 @@
             android:background="#F5F5F5"
             android:inputType="text" />
 
+        <!-- Description -->
         <EditText
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
@@ -67,14 +69,7 @@
             android:inputType="textMultiLine"
             android:minLines="3" />
 
-        <Spinner
-            android:id="@+id/spinnerType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="#F5F5F5"
-            android:padding="10dp" />
-
+        <!-- Buttons: Edit / Save / Cancel -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
