@@ -59,8 +59,8 @@ public class HomeActivity extends AppCompatActivity {
             ැ
             Glide.with(this)
                     .load(imageUri)
-                    .placeholder(android.R.drawable.ic_menu_gallery) // පින්තූරය load වෙනකම් පෙන්වන එකක්
-                    .error(android.R.drawable.stat_notify_error)    // load වුණේ නැත්නම් පෙන්වන එකක්
+                    .placeholder(android.R.drawable.ic_menu_gallery) 
+                    .error(android.R.drawable.stat_notify_error)    
                     .into(homeArtImage);
         }
 
