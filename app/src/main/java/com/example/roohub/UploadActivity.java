@@ -15,16 +15,18 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.ArrayList;
+
 public class UploadActivity extends AppCompatActivity {
 
     ImageView imagePreview;
     Spinner spinnerType;
     EditText etArtName, etDescription;
     Button btnEdit, btnSave, btnCancel;
-
     Uri selectedImageUri;
 
-    // Image picker launcher
     ActivityResultLauncher<String> imagePickerLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
@@ -38,7 +40,6 @@ public class UploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
-        // Find views
         imagePreview = findViewById(R.id.imagePreview);
         spinnerType = findViewById(R.id.spinnerType);
         etArtName = findViewById(R.id.etArtName);
@@ -47,33 +48,38 @@ public class UploadActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         btnCancel = findViewById(R.id.btnCancel);
 
-        // Populate spinner with Teacher / Artist
         String[] types = {"Teacher", "Artist"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, types);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerType.setAdapter(adapter);
 
-        // Select image on click
         imagePreview.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
-        // Save button click
         btnSave.setOnClickListener(v -> {
             String artName = etArtName.getText().toString().trim();
             String artDescription = etDescription.getText().toString().trim();
             String artType = spinnerType.getSelectedItem().toString();
 
             if (selectedImageUri != null && !artName.isEmpty()) {
-                // Save data to SharedPreferences
                 SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+
+                // දැනට තියෙන ලිස්ට් එක ගන්න
+                String allArt = prefs.getString("all_art_data", "");
+
+                // අලුත් දත්ත ටික එක දිග string එකක් විදිහට හදාගන්න (වෙන් කරන්නේ | සංකේතයෙන්)
+                String newData = artName + "###" + artType + "###" + artDescription + "###" + selectedImageUri.toString();
+
+                // අලුත් දත්ත පරණ ඒවට එකතු කරන්න
+                if (!allArt.isEmpty()) {
+                    allArt = newData + "|||" + allArt; // අලුත් ඒවා උඩට එන්න
+                } else {
+                    allArt = newData;
+                }
+
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("last_uploaded_image", selectedImageUri.toString());
-                editor.putString("last_art_name", artName);
-                editor.putString("last_art_description", artDescription);
-                editor.putString("last_art_type", artType);
+                editor.putString("all_art_data", allArt);
                 editor.apply();
 
-                // Go back to HomeActivity
                 startActivity(new Intent(UploadActivity.this, HomeActivity.class));
                 finish();
             } else {
@@ -81,33 +87,6 @@ public class UploadActivity extends AppCompatActivity {
             }
         });
 
-        // Edit button: load previously saved art
-        btnEdit.setOnClickListener(v -> {
-            SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-            String name = prefs.getString("last_art_name", "");
-            String desc = prefs.getString("last_art_description", "");
-            String type = prefs.getString("last_art_type", "");
-            String uri = prefs.getString("last_uploaded_image", null);
-
-            etArtName.setText(name);
-            etDescription.setText(desc);
-
-            if (!type.isEmpty()) {
-                for (int i = 0; i < spinnerType.getCount(); i++) {
-                    if (spinnerType.getItemAtPosition(i).toString().equals(type)) {
-                        spinnerType.setSelection(i);
-                        break;
-                    }
-                }
-            }
-
-            if (uri != null) {
-                selectedImageUri = Uri.parse(uri);
-                imagePreview.setImageURI(selectedImageUri);
-            }
-        });
-
-        // Cancel button: close activity
         btnCancel.setOnClickListener(v -> finish());
     }
 }
