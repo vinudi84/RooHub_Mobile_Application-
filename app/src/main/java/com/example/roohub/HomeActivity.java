@@ -8,8 +8,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide; 
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -25,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+       
         notification = findViewById(R.id.btnNotification);
         logout = findViewById(R.id.btnLogout);
         upload = findViewById(R.id.btnUpload);
@@ -36,23 +40,51 @@ public class HomeActivity extends AppCompatActivity {
         homeArtType = findViewById(R.id.home_art_type);
         homeArtDescription = findViewById(R.id.home_art_description);
 
-        // Load saved art info
+        
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        String uri = prefs.getString("last_uploaded_image", null);
-        String name = prefs.getString("last_art_name", "");
-        String type = prefs.getString("last_art_type", "");
-        String desc = prefs.getString("last_art_description", "");
+        String imageUriString = prefs.getString("last_uploaded_image", null);
+        String name = prefs.getString("last_art_name", "No Name");
+        String type = prefs.getString("last_art_type", "No Type");
+        String desc = prefs.getString("last_art_description", "No Description");
 
-        if (uri != null) homeArtImage.setImageURI(Uri.parse(uri));
+       
         homeArtName.setText(name);
         homeArtType.setText(type);
         homeArtDescription.setText(desc);
 
-        // Navigation
+       
+        if (imageUriString != null) {
+            Uri imageUri = Uri.parse(imageUriString);
+
+            ැ
+            Glide.with(this)
+                    .load(imageUri)
+                    .placeholder(android.R.drawable.ic_menu_gallery) 
+                    .error(android.R.drawable.stat_notify_error)    
+                    .into(homeArtImage);
+        }
+
+        
         notification.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, NotificationActivity.class)));
-        upload.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, UploadActivity.class)));
-        profile.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, ProfileActivity.class)));
+
+        upload.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, UploadActivity.class);
+            startActivity(intent);
+        });
+
+        profile.setOnClickListener(v -> {
+            
+            startActivity(new Intent(HomeActivity.this, EditProfileActivity.class));
+        });
+
         course.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, CourseActivity.class)));
-        logout.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, LoginActivity.class)));
+
+        logout.setOnClickListener(v -> {
+           
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
     }
 }
