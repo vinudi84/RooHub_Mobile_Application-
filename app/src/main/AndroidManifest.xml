@@ -13,13 +13,17 @@
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
 
+        <!-- Notification Activity (ADD THIS) -->
+        <activity
+            android:name=".NotificationActivity"
+            android:exported="false" />
+
         <!-- Course Activity -->
         <activity
             android:name=".CourseActivity"
             android:exported="false" />
 
         <!-- Other Activities -->
-
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />

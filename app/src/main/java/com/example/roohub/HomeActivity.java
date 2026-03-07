@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
-    // Variables - ID වලට ගැලපෙන පරිදි
+
     ImageView notification, logout;
     ImageButton upload;
     LinearLayout profile, course;
@@ -19,10 +19,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // XML එකේ නම activity_home.xml විය යුතුයි
+
         setContentView(R.layout.activity_home);
 
-        // XML එකේ ID සමඟ සම්බන්ධ කිරීම
+
         notification = findViewById(R.id.btnNotification);
         logout = findViewById(R.id.btnLogout);
         upload = findViewById(R.id.btnUpload);

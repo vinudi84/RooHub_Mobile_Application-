@@ -1,7 +1,9 @@
-package com.example.roohub;
+package com.example.roohub;   // change to your package name
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class NotificationActivity extends AppCompatActivity {
@@ -13,10 +15,15 @@ public class NotificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
+
         btnBack = findViewById(R.id.btnBack);
 
-        // Back button wita  (Home ekata yano)
-
-        btnBack.setOnClickListener(v -> finish());
+        // back button click
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish(); // go back to previous activity
+            }
+        });
     }
 }
