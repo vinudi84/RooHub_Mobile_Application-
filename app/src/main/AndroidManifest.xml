@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,9 +13,14 @@
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
 
-        <!-- Notification Activity (ADD THIS) -->
+        <!-- Notification Activity -->
         <activity
             android:name=".NotificationActivity"
+            android:exported="false" />
+
+        <!-- Edit Profile Activity -->
+        <activity
+            android:name=".EditProfileActivity"
             android:exported="false" />
 
         <!-- Course Activity -->
@@ -24,9 +28,9 @@
             android:name=".CourseActivity"
             android:exported="false" />
 
-        <!-- Other Activities -->
+        <!-- Course View Activity -->
         <activity
-            android:name=".ProfileActivity"
+            android:name=".CourseViewActivity"
             android:exported="false" />
 
         <activity
@@ -43,7 +47,7 @@
 
         <!-- Launcher Activity -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".ProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,29 +1,45 @@
 package com.example.roohub;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    Spinner spinnerRole;
+    private TextView txtFullName, txtBio;
+    private ImageView displayProfileImage;
+    private Button btnEditProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        spinnerRole = findViewById(R.id.spinnerRole);
+        txtFullName = findViewById(R.id.txtFullName);
+        txtBio = findViewById(R.id.txtBio);
+        displayProfileImage = findViewById(R.id.displayProfileImage);
+        btnEditProfile = findViewById(R.id.btnEditProfile);
 
-        String[] roles = {"Learner", "Art Enthusiast", "Teacher"};
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String name = extras.getString("NAME");
+            String bio = extras.getString("BIO");
+            String imageUriString = extras.getString("IMAGE_URI");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                roles
-        );
+            if (name != null) txtFullName.setText(name);
+            if (bio != null) txtBio.setText(bio);
+            if (imageUriString != null) {
+                displayProfileImage.setImageURI(Uri.parse(imageUriString));
+            }
+        }
 
-        spinnerRole.setAdapter(adapter);
+        btnEditProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+            startActivity(intent);
+        });
     }
 }
