@@ -8,8 +8,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide; // Glide import කරන්න
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -25,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // UI Elements සම්බන්ධ කිරීම
         notification = findViewById(R.id.btnNotification);
         logout = findViewById(R.id.btnLogout);
         upload = findViewById(R.id.btnUpload);
@@ -36,23 +40,51 @@ public class HomeActivity extends AppCompatActivity {
         homeArtType = findViewById(R.id.home_art_type);
         homeArtDescription = findViewById(R.id.home_art_description);
 
-        // Load saved art info
+        // SharedPreferences වලින් දත්ත ලබා ගැනීම
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        String uri = prefs.getString("last_uploaded_image", null);
-        String name = prefs.getString("last_art_name", "");
-        String type = prefs.getString("last_art_type", "");
-        String desc = prefs.getString("last_art_description", "");
+        String imageUriString = prefs.getString("last_uploaded_image", null);
+        String name = prefs.getString("last_art_name", "No Name");
+        String type = prefs.getString("last_art_type", "No Type");
+        String desc = prefs.getString("last_art_description", "No Description");
 
-        if (uri != null) homeArtImage.setImageURI(Uri.parse(uri));
+        // දත්ත UI එකට ඇතුළත් කිරීම
         homeArtName.setText(name);
         homeArtType.setText(type);
         homeArtDescription.setText(desc);
 
-        // Navigation
+        // පින්තූරය පෙන්වීම (Crash එක නවත්වන ප්‍රධාන කොටස)
+        if (imageUriString != null) {
+            Uri imageUri = Uri.parse(imageUriString);
+
+            // setImageURI වෙනුවට Glide පාවිච්චි කිරීමෙන් Permission Error එක එන්නේ නැහැ
+            Glide.with(this)
+                    .load(imageUri)
+                    .placeholder(android.R.drawable.ic_menu_gallery) // පින්තූරය load වෙනකම් පෙන්වන එකක්
+                    .error(android.R.drawable.stat_notify_error)    // load වුණේ නැත්නම් පෙන්වන එකක්
+                    .into(homeArtImage);
+        }
+
+        // Navigation (බොත්තම් වල ක්‍රියාකාරිත්වය)
         notification.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, NotificationActivity.class)));
-        upload.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, UploadActivity.class)));
-        profile.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, ProfileActivity.class)));
+
+        upload.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, UploadActivity.class);
+            startActivity(intent);
+        });
+
+        profile.setOnClickListener(v -> {
+            // ProfileActivity එක තාම හදලා නැත්නම් EditProfileActivity එකට යවන්න පුළුවන්
+            startActivity(new Intent(HomeActivity.this, EditProfileActivity.class));
+        });
+
         course.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, CourseActivity.class)));
-        logout.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, LoginActivity.class)));
+
+        logout.setOnClickListener(v -> {
+            // Logout වෙද්දී Login screen එකට ගිහින් කලින් තිබුණු Activity ටික අයින් කරනවා
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
     }
 }
