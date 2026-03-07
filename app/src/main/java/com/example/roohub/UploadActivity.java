@@ -63,15 +63,15 @@ public class UploadActivity extends AppCompatActivity {
             if (selectedImageUri != null && !artName.isEmpty()) {
                 SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
 
-                // දැනට තියෙන ලිස්ට් එක ගන්න
+                // data list
                 String allArt = prefs.getString("all_art_data", "");
 
-                // අලුත් දත්ත ටික එක දිග string එකක් විදිහට හදාගන්න (වෙන් කරන්නේ | සංකේතයෙන්)
+                // new data string
                 String newData = artName + "###" + artType + "###" + artDescription + "###" + selectedImageUri.toString();
 
-                // අලුත් දත්ත පරණ ඒවට එකතු කරන්න
+                // add new data in old data
                 if (!allArt.isEmpty()) {
-                    allArt = newData + "|||" + allArt; // අලුත් ඒවා උඩට එන්න
+                    allArt = newData + "|||" + allArt; // new in up
                 } else {
                     allArt = newData;
                 }
