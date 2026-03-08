@@ -27,7 +27,7 @@ public class EditProfileActivity extends AppCompatActivity {
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     selectedImageUri = result.getData().getData();
-                    // පින්තූරය පෙන්වීමට Glide පාවිච්චි කරන්න
+
                     Glide.with(this).load(selectedImageUri).into(editImagePreview);
                 }
             }
