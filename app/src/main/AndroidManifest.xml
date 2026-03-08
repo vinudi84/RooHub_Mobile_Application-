@@ -19,16 +19,29 @@
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
         <activity
+            android:name=".NaturalArtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AnimalArtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AnimationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PencilArtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PenArtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ColorArtActivity"
+            android:exported="false" /> <!-- Course Activity -->
+        <!-- <activity -->
+        <!-- android:name=".CourseActivity" -->
+        <!-- android:exported="false" /> -->
+        <!-- Other Activities -->
+        <activity
             android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".NotificationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EditProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CourseActivity"
             android:exported="false" />
         <activity
             android:name=".UploadActivity"
@@ -38,7 +51,7 @@
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
-            android:exported="false" />
+            android:exported="false" /> <!-- Launcher Activity -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">
