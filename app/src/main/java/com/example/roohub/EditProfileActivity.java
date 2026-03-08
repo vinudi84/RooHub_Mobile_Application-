@@ -1,6 +1,7 @@
 package com.example.roohub;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import com.bumptech.glide.Glide;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -23,7 +25,7 @@ public class EditProfileActivity extends AppCompatActivity {
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     selectedImageUri = result.getData().getData();
-                    editImagePreview.setImageURI(selectedImageUri);
+                    Glide.with(this).load(selectedImageUri).into(editImagePreview);
                 }
             }
     );
@@ -45,14 +47,22 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
         btnSave.setOnClickListener(v -> {
-            Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
-            intent.putExtra("NAME", inputName.getText().toString());
-            intent.putExtra("BIO", inputBio.getText().toString());
+            String name = inputName.getText().toString();
+            String bio = inputBio.getText().toString();
+
+            // Save data to SharedPreferences
+            SharedPreferences.Editor editor = getSharedPreferences("UserPrefs", MODE_PRIVATE).edit();
+            editor.putString("NAME", name);
+            editor.putString("BIO", bio);
             if (selectedImageUri != null) {
-                intent.putExtra("IMAGE_URI", selectedImageUri.toString());
+                editor.putString("IMAGE_URI", selectedImageUri.toString());
             }
-            startActivity(intent);
-            finish();
+            editor.apply();
+
+            // ProfileActivity එකට යාම
+            finish(); // Edit එක වැසීම පමණක් සෑහේ, Profile එක දැනටමත් stack එකේ තියෙන්න ඕනේ
         });
     }
 }
+
+

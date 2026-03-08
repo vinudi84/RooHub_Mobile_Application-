@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide; // මේක අනිවාර්යයෙන් තියෙන්න ඕනේ
+
 public class HomeActivity extends AppCompatActivity {
 
     ImageView notification, logout;
@@ -25,6 +27,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // ActionBar එක hide කරන්න (අවශ්‍ය නම් පමණක්)
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         notification = findViewById(R.id.btnNotification);
         logout = findViewById(R.id.btnLogout);
         upload = findViewById(R.id.btnUpload);
@@ -38,21 +45,41 @@ public class HomeActivity extends AppCompatActivity {
 
         // Load saved art info
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        String uri = prefs.getString("last_uploaded_image", null);
-        String name = prefs.getString("last_art_name", "");
-        String type = prefs.getString("last_art_type", "");
-        String desc = prefs.getString("last_art_description", "");
+        String uriString = prefs.getString("last_uploaded_image", null);
+        String name = prefs.getString("last_art_name", "No Name");
+        String type = prefs.getString("last_art_type", "No Type");
+        String desc = prefs.getString("last_art_description", "No Description");
 
-        if (uri != null) homeArtImage.setImageURI(Uri.parse(uri));
+        // මෙතනදී Glide පාවිච්චි කිරීමෙන් Crash වීම නවතී
+        if (uriString != null) {
+            Uri imageUri = Uri.parse(uriString);
+            Glide.with(this)
+                    .load(imageUri)
+                    .placeholder(android.R.drawable.ic_menu_gallery) // load වෙනකන් පෙන්වන රූපය
+                    .into(homeArtImage);
+        }
+
         homeArtName.setText(name);
         homeArtType.setText(type);
         homeArtDescription.setText(desc);
 
         // Navigation
         notification.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, NotificationActivity.class)));
-        upload.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, UploadActivity.class)));
+
+        upload.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, UploadActivity.class);
+            startActivity(intent);
+        });
+
         profile.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, ProfileActivity.class)));
         course.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, CourseActivity.class)));
-        logout.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, LoginActivity.class)));
+
+        logout.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish(); // Login එකට ගියාම Home එක close කරන්න
+        });
     }
 }
+
+

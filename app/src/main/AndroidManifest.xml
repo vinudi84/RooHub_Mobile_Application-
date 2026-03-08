@@ -29,9 +29,7 @@
             android:exported="false" />
 
         <!-- Course View Activity -->
-        <activity
-            android:name=".CourseViewActivity"
-            android:exported="false" />
+
 
         <activity
             android:name=".UploadActivity"
@@ -47,7 +45,7 @@
 
         <!-- Launcher Activity -->
         <activity
-            android:name=".ProfileActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,3 +56,5 @@
     </application>
 
 </manifest>
+
+
