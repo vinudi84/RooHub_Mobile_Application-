@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="#F8F9FA">
 
-    <!-- Top Bar -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
@@ -20,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
-            android:background="@drawable/search_bg"
+            android:background="@android:color/white"
             android:hint="Search Art..."
             android:paddingStart="15dp"
             android:drawableStart="@android:drawable/ic_menu_search"
@@ -44,7 +43,6 @@
             app:tint="@android:color/white" />
     </LinearLayout>
 
-    <!-- Scrollable Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -52,6 +50,7 @@
         android:layout_below="@id/topBar">
 
         <LinearLayout
+            android:id="@+id/art_list_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -64,59 +63,12 @@
                 android:text="Art Gallery"
                 android:textColor="#333333"
                 android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <!-- CardView showing uploaded art -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-
-                    <ImageView
-                        android:id="@+id/home_art_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:scaleType="centerCrop" />
-
-                    <TextView
-                        android:id="@+id/home_art_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#333333"
-                        android:layout_marginTop="8dp"/>
-
-                    <TextView
-                        android:id="@+id/home_art_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="#666666"
-                        android:layout_marginTop="4dp"/>
-
-                    <TextView
-                        android:id="@+id/home_art_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="#444444"
-                        android:layout_marginTop="4dp"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"/>
 
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
