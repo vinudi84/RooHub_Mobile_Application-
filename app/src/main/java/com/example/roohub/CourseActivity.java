@@ -1,22 +1,26 @@
 package com.example.roohub;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CourseActivity extends AppCompatActivity {
 
-    Button colorArt, penArt, pencilArt, animation, animal, natural;
+    // Button variables ප්‍රකාශ කිරීම
+    private Button colorArt, penArt, pencilArt, animation, animal, natural;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
-        getSupportActionBar().hide();
 
+        // Action Bar එක hide කිරීම
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
+        // XML එකේ ඇති ID සමඟ සම්බන්ධ කිරීම
         colorArt = findViewById(R.id.btnColorArt);
         penArt = findViewById(R.id.btnPenArt);
         pencilArt = findViewById(R.id.btnPencilArt);
@@ -24,22 +28,42 @@ public class CourseActivity extends AppCompatActivity {
         animal = findViewById(R.id.btnAnimal);
         natural = findViewById(R.id.btnNatural);
 
-        colorArt.setOnClickListener(v ->
-                Toast.makeText(this,"Color Art Course",Toast.LENGTH_SHORT).show());
+        // --- Click Listeners ---
 
-        penArt.setOnClickListener(v ->
-                Toast.makeText(this,"Pen Art Course",Toast.LENGTH_SHORT).show());
+        // Color Art පිටුවට යාම
+        colorArt.setOnClickListener(v -> {
+            Intent intent = new Intent(CourseActivity.this, ColorArtActivity.class);
+            startActivity(intent);
+        });
 
-        pencilArt.setOnClickListener(v ->
-                Toast.makeText(this,"Pencil Art Course",Toast.LENGTH_SHORT).show());
+        // Pen Art පිටුවට යාම
+        penArt.setOnClickListener(v -> {
+            Intent intent = new Intent(CourseActivity.this, PenArtActivity.class);
+            startActivity(intent);
+        });
 
-        animation.setOnClickListener(v ->
-                Toast.makeText(this,"Animation Course",Toast.LENGTH_SHORT).show());
+        // Pencil Art පිටුවට යාම
+        pencilArt.setOnClickListener(v -> {
+            Intent intent = new Intent(CourseActivity.this, PencilArtActivity.class);
+            startActivity(intent);
+        });
 
-        animal.setOnClickListener(v ->
-                Toast.makeText(this,"Animal Art Course",Toast.LENGTH_SHORT).show());
+        // Animation පිටුවට යාම
+        animation.setOnClickListener(v -> {
+            Intent intent = new Intent(CourseActivity.this, AnimationActivity.class);
+            startActivity(intent);
+        });
 
-        natural.setOnClickListener(v ->
-                Toast.makeText(this,"Natural Art Course",Toast.LENGTH_SHORT).show());
+        // Animal Art පිටුවට යාම
+        animal.setOnClickListener(v -> {
+            Intent intent = new Intent(CourseActivity.this, AnimalArtActivity.class);
+            startActivity(intent);
+        });
+
+        // Natural Art පිටුවට යාම
+        natural.setOnClickListener(v -> {
+            Intent intent = new Intent(CourseActivity.this, NaturalArtActivity.class);
+            startActivity(intent);
+        });
     }
 }
