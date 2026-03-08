@@ -56,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
         if (imageUriString != null) {
             Uri imageUri = Uri.parse(imageUriString);
 
-            ැ
+
             Glide.with(this)
                     .load(imageUri)
                     .placeholder(android.R.drawable.ic_menu_gallery) 
