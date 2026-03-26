@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,11 +19,26 @@
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
         <activity
-            android:name=".CourseActivity"
+            android:name=".NaturalArtActivity"
             android:exported="false" />
         <activity
-            android:name=".CourseViewActivity"
+            android:name=".AnimalArtActivity"
             android:exported="false" />
+        <activity
+            android:name=".AnimationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PencilArtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PenArtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ColorArtActivity"
+            android:exported="false" />
+         <activity
+             android:name=".CourseActivity"
+             android:exported="false" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
@@ -27,6 +48,9 @@
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false"/>
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />

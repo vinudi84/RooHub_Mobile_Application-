@@ -6,12 +6,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -19,16 +18,25 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.ArrayList;
+
 public class UploadActivity extends AppCompatActivity {
 
     ImageView imagePreview;
-    Button btnUploadImage, btnEdit, btnSave, btnCancel;
-    EditText etArtName, etDescription;
     Spinner spinnerType;
+    EditText etArtName, etDescription;
+    Button btnEdit, btnSave, btnCancel;
+    Uri selectedImageUri;
 
-    Uri imageUri;
-
-    private static final int PICK_IMAGE = 1;
+    ActivityResultLauncher<String> imagePickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    selectedImageUri = uri;
+                    imagePreview.setImageURI(uri);
+                }
+            });
 
     // For modern activity result API
     private ActivityResultLauncher<Intent> imagePickerLauncher;
@@ -38,9 +46,10 @@ public class UploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
-        // Connect UI components
         imagePreview = findViewById(R.id.imagePreview);
-        btnUploadImage = findViewById(R.id.btnUploadImage);
+        spinnerType = findViewById(R.id.spinnerType);
+        etArtName = findViewById(R.id.etArtName);
+        etDescription = findViewById(R.id.etDescription);
         btnEdit = findViewById(R.id.btnEdit);
         btnSave = findViewById(R.id.btnSave);
         btnCancel = findViewById(R.id.btnCancel);
@@ -105,6 +114,8 @@ public class UploadActivity extends AppCompatActivity {
                 Intent intent = new Intent(UploadActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
+            } else {
+                Toast.makeText(this, "Please select an image and enter art name", Toast.LENGTH_SHORT).show();
             }
         });
 
