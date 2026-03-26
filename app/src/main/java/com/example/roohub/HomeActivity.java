@@ -50,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+
         // Logout logic
         logout.setOnClickListener(v -> {
             Intent intent = new Intent(this, LoginActivity.class);
