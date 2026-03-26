@@ -1,10 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CourseActivity">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp"
+    android:background="#FFC1DA">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/art_courses"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#AC1754"
+        android:layout_marginBottom="30dp"/>
+
+    <Button
+        android:id="@+id/btnColorArt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/color_art"
+        android:layout_marginBottom="10dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:backgroundTint="#E53888"/>
+
+    <Button
+        android:id="@+id/btnPenArt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pen_art"
+        android:layout_marginBottom="10dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:backgroundTint="#F37199"/>
+
+    <Button
+        android:id="@+id/btnPencilArt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pencil_art"
+        android:layout_marginBottom="10dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:backgroundTint="#F7A8C4"/>
+
+    <Button
+        android:id="@+id/btnAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/animation"
+        android:layout_marginBottom="10dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:backgroundTint="#AC1754"/>
+
+    <Button
+        android:id="@+id/btnAnimal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/animal_art"
+        android:layout_marginBottom="10dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:backgroundTint="#E53888"/>
+
+    <Button
+        android:id="@+id/btnNatural"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/natural_art"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:backgroundTint="#F37199"/>
+
+</LinearLayout>
