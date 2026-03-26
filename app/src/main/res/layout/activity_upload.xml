@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Upload Image"
-            android:backgroundTint="#6D6875"
+            android:backgroundTint="#F37199"
             android:textColor="#FFFFFF"
             android:layout_marginTop="10dp"
             android:padding="12dp" />
@@ -88,8 +88,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Edit"
-                android:backgroundTint="#FFC107"
-                android:textColor="#000000" />
+                android:backgroundTint="#F37199"
+                android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/btnSave"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Save"
-                android:backgroundTint="#4CAF50"
+                android:backgroundTint="#F37199"
                 android:textColor="#FFFFFF"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp" />
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Cancel"
-                android:backgroundTint="#F44336"
+                android:backgroundTint="#F37199"
                 android:textColor="#FFFFFF" />
 
         </LinearLayout>
