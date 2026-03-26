@@ -3,7 +3,7 @@
     android:id="@+id/uploadPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B1A7A6"
+    android:background="#F37199"
     android:padding="20dp">
 
     <LinearLayout
@@ -31,7 +31,7 @@
             android:id="@+id/imagePreview"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="#EEEEEE"
+            android:background="#F7A8C4"
             android:scaleType="centerCrop"
             android:contentDescription="Uploaded Image"
             android:padding="6dp"
@@ -56,7 +56,7 @@
             android:hint="Art Name"
             android:layout_marginTop="20dp"
             android:padding="12dp"
-            android:background="#F5F5F5"
+            android:background="#FFFFF"
             android:inputType="text" />
 
         <!-- Description -->
@@ -67,7 +67,7 @@
             android:hint="Description"
             android:layout_marginTop="15dp"
             android:padding="12dp"
-            android:background="#F5F5F5"
+            android:background="#FFFFF"
             android:inputType="textMultiLine"
             android:minLines="3" />
 
@@ -106,7 +106,7 @@
                 android:layout_weight="1"
                 android:text="Cancel"
                 android:backgroundTint="#F37199"
-                android:textColor="#FFFFFF" />
+                android:textColor="#ffff" />
 
         </LinearLayout>
 
