@@ -29,9 +29,9 @@ public class teacherSignUp extends AppCompatActivity {
     ActivityResultLauncher<String> galleryLauncher;
     Button registerBtn;
 
-    // Added EditText fields
-    EditText etName, etEmail, etQualifications;
-    Uri selectedImageUri;
+    // Declare variables for the input fields
+    EditText etName, etQualification, etEmail;
+    Uri selectedImageUri; // To store the profile image URI
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,47 +43,56 @@ public class teacherSignUp extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        // Initialize Views
+        // Initialize Views using IDs from your XML
         artSpinner = findViewById(R.id.artSpinner);
         profileImage = findViewById(R.id.profileImage);
         registerBtn = findViewById(R.id.registerBtn);
         etName = findViewById(R.id.name);
+        etQualification = findViewById(R.id.qualification);
         etEmail = findViewById(R.id.email);
-        etQualifications = findViewById(R.id.qualification);
 
         // Initialize the Gallery Launcher
         galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 uri -> {
                     if (uri != null) {
+                        // This line "locks" the permission so you can use it in the next activity
+                        final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                        getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
                         profileImage.setImageURI(uri);
-                        selectedImageUri = uri; // Save URI to pass to next activity
+                        selectedImageUri = uri;
                     }
                 }
         );
 
-        profileImage.setOnClickListener(v -> galleryLauncher.launch("image/*"));
+        profileImage.setOnClickListener(v -> {
+            galleryLauncher.launch("image/*");
+        });
 
         registerBtn.setOnClickListener(v -> {
-            String name = etName.getText().toString().trim();
-            String email = etEmail.getText().toString().trim();
-            String qualifications = etQualifications.getText().toString().trim();
+            // Get data from fields
+            String teacherName = etName.getText().toString().trim();
+            String teacherQual = etQualification.getText().toString().trim();
+            String teacherEmail = etEmail.getText().toString().trim();
             String artType = artSpinner.getSelectedItem().toString();
 
-            // Simple Validation
-            if (name.isEmpty() || email.isEmpty() || artType.equals("Art type")) {
-                Toast.makeText(this, "Please fill required fields", Toast.LENGTH_SHORT).show();
+            // Check if user selected a valid art type
+            if (artType.equals("Art type")) {
+                Toast.makeText(this, "Please select an Art Type", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            // Create Intent to move to ViewUploadActivity
             Intent intent = new Intent(teacherSignUp.this, ViewUploadActivity.class);
 
-            // Passing data via Intent
-            intent.putExtra("teacher_name", name);
-            intent.putExtra("teacher_email", email);
+            // Put data into the intent
+            intent.putExtra("teacher_name", teacherName);
+            intent.putExtra("teacher_email", teacherEmail);
             intent.putExtra("art_type", artType);
-            intent.putExtra("qualifications", qualifications);
+            intent.putExtra("qualifications", teacherQual);
 
+            // Pass the image URI as a string if it exists
             if (selectedImageUri != null) {
                 intent.putExtra("teacher_image", selectedImageUri.toString());
             }
@@ -91,8 +100,8 @@ public class teacherSignUp extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Spinner Logic
         String[] artTypes = {"Art type", "Pencil art", "Coloring art", "Assemblage art"};
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_spinner_item,
@@ -111,7 +120,6 @@ public class teacherSignUp extends AppCompatActivity {
                 return view;
             }
         };
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         artSpinner.setAdapter(adapter);
     }

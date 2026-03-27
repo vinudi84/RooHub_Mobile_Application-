@@ -26,12 +26,6 @@ public class ViewUploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_upload);
 
-        // Hide the Action Bar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-
-        // UI Initialization
         tvName = findViewById(R.id.tvName);
         tvEmail = findViewById(R.id.tvEmail);
         tvArtType = findViewById(R.id.tvArtType);
@@ -42,35 +36,47 @@ public class ViewUploadActivity extends AppCompatActivity {
         Button btnSelectVideo = findViewById(R.id.btnSelectVideo);
         Button btnUpload = findViewById(R.id.btnUpload);
 
-        // Receive data using Intent keys from teacherSignUp
         Intent intent = getIntent();
         if (intent != null) {
-            // These keys must match the putExtra strings in teacherSignUp
             String name = intent.getStringExtra("teacher_name");
             String email = intent.getStringExtra("teacher_email");
             teacherArtCategory = intent.getStringExtra("art_type");
             String qualifications = intent.getStringExtra("qualifications");
             String imageUriString = intent.getStringExtra("teacher_image");
 
-            // Update UI with received data
             if (name != null) tvName.setText("Name: " + name);
             if (email != null) tvEmail.setText("Email: " + email);
             if (teacherArtCategory != null) tvArtType.setText("Art Type: " + teacherArtCategory);
             if (qualifications != null) tvQualifications.setText("Qualifications: " + qualifications);
 
-            // Set Profile Image if a URI was passed
+
+
+// show Profile Image
+
             if (imageUriString != null) {
+
                 ivTeacherProfile.setImageURI(Uri.parse(imageUriString));
+
             }
+
         }
 
-        // Feature: Select a video from gallery
+
+
+// select a video using gallery
+
         btnSelectVideo.setOnClickListener(v -> {
+
             Intent videoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+
             startActivityForResult(videoIntent, VIDEO_PICK_REQUEST);
+
         });
 
-        // Feature: Logic for Upload Button
+
+
+// Logic of Upload Button
+
         btnUpload.setOnClickListener(v -> {
             String artName = etArtName.getText().toString().trim();
             String artDesc = etVideoDetails.getText().toString().trim();
@@ -78,7 +84,9 @@ public class ViewUploadActivity extends AppCompatActivity {
             if (artName.isEmpty() || artDesc.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields!", Toast.LENGTH_SHORT).show();
             } else {
-                // Uses the category passed from the spinner or a default
+
+// take decision to select Category
+
                 String folder = (teacherArtCategory != null) ? teacherArtCategory : "General Art";
                 String msg = "Art '" + artName + "' is uploading to " + folder + " category.";
                 Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
