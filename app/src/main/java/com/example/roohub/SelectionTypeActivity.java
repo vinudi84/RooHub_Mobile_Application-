@@ -1,24 +1,45 @@
 package com.example.roohub;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class SelectionTypeActivity extends AppCompatActivity {
+
+
+    private Button btnTeacher, btnArtist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+
+
         setContentView(R.layout.activity_selection_type);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+
+        btnTeacher = findViewById(R.id.btnTeacher);
+        btnArtist = findViewById(R.id.btnArtist);
+
+
+        if (btnTeacher != null) {
+            btnTeacher.setOnClickListener(v -> {
+
+
+                Intent intent = new Intent(SelectionTypeActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            });
+        }
+
+
+        if (btnArtist != null) {
+            btnArtist.setOnClickListener(v -> {
+                // UploadActivity ව
+                Intent intent = new Intent(SelectionTypeActivity.this, UploadActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 }
