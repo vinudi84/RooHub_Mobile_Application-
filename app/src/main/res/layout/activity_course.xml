@@ -10,70 +10,38 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/art_courses"
+        android:text="Art Courses"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="#AC1754"
         android:layout_marginBottom="30dp"/>
 
     <Button
-        android:id="@+id/btnColorArt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/color_art"
-        android:layout_marginBottom="10dp"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:backgroundTint="#E53888"/>
-
-    <Button
-        android:id="@+id/btnPenArt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/pen_art"
-        android:layout_marginBottom="10dp"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:backgroundTint="#F37199"/>
-
-    <Button
         android:id="@+id/btnPencilArt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/pencil_art"
-        android:layout_marginBottom="10dp"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:backgroundTint="#F7A8C4"/>
+        android:text="Pencil Art"
+        android:backgroundTint="#E91E63"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="10dp"/>
 
     <Button
-        android:id="@+id/btnAnimation"
+        android:id="@+id/btnColorArt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/animation"
-        android:layout_marginBottom="10dp"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:backgroundTint="#AC1754"/>
+        android:text="Coloring"
+        android:backgroundTint="#F06292"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="10dp"/>
 
     <Button
-        android:id="@+id/btnAnimal"
+        android:id="@+id/btnAssemblageArt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/animal_art"
-        android:layout_marginBottom="10dp"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:backgroundTint="#E53888"/>
-
-    <Button
-        android:id="@+id/btnNatural"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/natural_art"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:backgroundTint="#F37199"/>
+        android:text="Assemblage Art"
+        android:backgroundTint="#F48FB1"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="10dp"/>
 
 </LinearLayout>
 

@@ -3,14 +3,14 @@
     android:id="@+id/uploadPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B1A7A6"
+    android:background="#F7A8C4"
     android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#FFFFFF"
+        android:background="#F37199"
         android:padding="20dp"
         android:elevation="6dp">
 
@@ -22,7 +22,7 @@
             android:text="Upload Art"
             android:textSize="26sp"
             android:textStyle="bold"
-            android:textColor="#333333"
+            android:textColor="#AC1754"
             android:layout_gravity="center"
             android:layout_marginBottom="20dp" />
 
@@ -31,20 +31,14 @@
             android:id="@+id/imagePreview"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="#EEEEEE"
+            android:background="#E53888"
             android:scaleType="centerCrop"
             android:contentDescription="Uploaded Image"
             android:padding="6dp"
             android:layout_marginBottom="10dp" />
 
-        <!-- Spinner: Teacher / Artist -->
-        <Spinner
-            android:id="@+id/spinnerType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="#F5F5F5"
-            android:padding="10dp" />
+
+
 
         <!-- Art Name -->
         <EditText
@@ -54,7 +48,7 @@
             android:hint="Art Name"
             android:layout_marginTop="20dp"
             android:padding="12dp"
-            android:background="#F5F5F5"
+            android:background="#F7A8C4"
             android:inputType="text" />
 
         <!-- Description -->
@@ -65,7 +59,7 @@
             android:hint="Description"
             android:layout_marginTop="15dp"
             android:padding="12dp"
-            android:background="#F5F5F5"
+            android:background="#F7A8C4"
             android:inputType="textMultiLine"
             android:minLines="3" />
 
@@ -83,8 +77,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Edit"
-                android:backgroundTint="#FFC107"
-                android:textColor="#000000" />
+                android:backgroundTint="#E53888"
+                android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/btnSave"
@@ -92,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Save"
-                android:backgroundTint="#4CAF50"
+                android:backgroundTint="#E53888"
                 android:textColor="#FFFFFF"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp" />
@@ -103,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Cancel"
-                android:backgroundTint="#F44336"
+                android:backgroundTint="#E53888"
                 android:textColor="#FFFFFF" />
 
         </LinearLayout>
