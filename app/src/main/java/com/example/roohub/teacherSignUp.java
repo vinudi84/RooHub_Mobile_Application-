@@ -1,15 +1,17 @@
 package com.example.roohub;
 
-import android.content.Intent; // Required for navigation
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button; // Required for the button
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -27,6 +29,10 @@ public class teacherSignUp extends AppCompatActivity {
     ActivityResultLauncher<String> galleryLauncher;
     Button registerBtn;
 
+    // Added EditText fields
+    EditText etName, etEmail, etQualifications;
+    Uri selectedImageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,30 +47,49 @@ public class teacherSignUp extends AppCompatActivity {
         artSpinner = findViewById(R.id.artSpinner);
         profileImage = findViewById(R.id.profileImage);
         registerBtn = findViewById(R.id.registerBtn);
+        etName = findViewById(R.id.name);
+        etEmail = findViewById(R.id.email);
+        etQualifications = findViewById(R.id.qualification);
 
-        //Initialize the Gallery Launcher
+        // Initialize the Gallery Launcher
         galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 uri -> {
                     if (uri != null) {
-                        // Set the selected image URI to the CircleImageView
                         profileImage.setImageURI(uri);
+                        selectedImageUri = uri; // Save URI to pass to next activity
                     }
                 }
         );
 
-        // Set Click Listener on the Profile Image
-        profileImage.setOnClickListener(v -> {
-            // This opens the gallery to select an image
-            galleryLauncher.launch("image/*");
-        });
-
+        profileImage.setOnClickListener(v -> galleryLauncher.launch("image/*"));
 
         registerBtn.setOnClickListener(v -> {
+            String name = etName.getText().toString().trim();
+            String email = etEmail.getText().toString().trim();
+            String qualifications = etQualifications.getText().toString().trim();
+            String artType = artSpinner.getSelectedItem().toString();
+
+            // Simple Validation
+            if (name.isEmpty() || email.isEmpty() || artType.equals("Art type")) {
+                Toast.makeText(this, "Please fill required fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent intent = new Intent(teacherSignUp.this, ViewUploadActivity.class);
+
+            // Passing data via Intent
+            intent.putExtra("teacher_name", name);
+            intent.putExtra("teacher_email", email);
+            intent.putExtra("art_type", artType);
+            intent.putExtra("qualifications", qualifications);
+
+            if (selectedImageUri != null) {
+                intent.putExtra("teacher_image", selectedImageUri.toString());
+            }
+
             startActivity(intent);
         });
-
 
         String[] artTypes = {"Art type", "Pencil art", "Coloring art", "Assemblage art"};
 
@@ -82,11 +107,7 @@ public class teacherSignUp extends AppCompatActivity {
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
-                if (position == 0) {
-                    tv.setTextColor(Color.GRAY);
-                } else {
-                    tv.setTextColor(Color.BLACK);
-                }
+                tv.setTextColor(position == 0 ? Color.GRAY : Color.BLACK);
                 return view;
             }
         };
