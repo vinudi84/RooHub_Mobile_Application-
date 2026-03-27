@@ -12,7 +12,7 @@
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome, Are You?"
+        android:text="Welcome , Are You?"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="#AC1754"
