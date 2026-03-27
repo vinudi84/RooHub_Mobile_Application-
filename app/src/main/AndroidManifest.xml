@@ -18,9 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
-        <activity
-            android:name=".teacherSignUp"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".teacherSignUp"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".NaturalArtActivity"
             android:exported="false" />
@@ -58,7 +58,7 @@
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".teacherSignUp"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
