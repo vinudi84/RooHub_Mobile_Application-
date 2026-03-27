@@ -28,7 +28,6 @@
                 android:textSize="34sp"
                 android:textStyle="bold"
                 android:textColor="#F875AA"
-                android:fontFamily="@font/broadway"
                 android:layout_gravity="center"
                 android:layout_marginBottom="30dp"/>
 
