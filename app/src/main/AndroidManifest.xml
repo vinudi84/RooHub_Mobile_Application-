@@ -22,6 +22,9 @@
             android:name=".SelectionTypeActivity"
             android:exported="false" />
         <activity
+            android:name=".SelectionTypeActivity"
+            android:exported="false" />
+        <activity
             android:name=".NaturalArtActivity"
             android:exported="false" />
         <activity
