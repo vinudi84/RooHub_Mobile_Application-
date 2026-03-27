@@ -37,6 +37,7 @@ public class ViewUploadActivity extends AppCompatActivity {
         Button btnSelectVideo = findViewById(R.id.btnSelectVideo);
         Button btnUpload = findViewById(R.id.btnUpload);
 
+        // Code updated to trigger Git push button
         // to get data using Intent
         Intent intent = getIntent();
         if (intent != null) {
@@ -58,13 +59,13 @@ public class ViewUploadActivity extends AppCompatActivity {
             }
         }
 
-        // selct a video using gallery
+        // select a video using gallery
         btnSelectVideo.setOnClickListener(v -> {
             Intent videoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(videoIntent, VIDEO_PICK_REQUEST);
         });
 
-        // Login of Upload Button
+        // Logic of Upload Button
         btnUpload.setOnClickListener(v -> {
             String artName = etArtName.getText().toString().trim();
             String artDesc = etVideoDetails.getText().toString().trim();
@@ -72,7 +73,7 @@ public class ViewUploadActivity extends AppCompatActivity {
             if (artName.isEmpty() || artDesc.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields!", Toast.LENGTH_SHORT).show();
             } else {
-                // take decision to selct Category
+                // take decision to select Category
                 String folder = (teacherArtCategory != null) ? teacherArtCategory : "General Art";
                 String msg = "Art '" + artName + "' is uploading to " + folder + " category.";
                 Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
