@@ -37,14 +37,8 @@
             android:padding="6dp"
             android:layout_marginBottom="10dp" />
 
-        <!-- Spinner: Teacher / Artist -->
-        <Spinner
-            android:id="@+id/spinnerType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="#F7A8C4"
-            android:padding="10dp" />
+
+
 
         <!-- Art Name -->
         <EditText
