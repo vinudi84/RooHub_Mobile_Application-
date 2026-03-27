@@ -39,7 +39,7 @@ public class CourseActivity extends AppCompatActivity {
         btnAssemblageArt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // මෙතන AssemblageArtActivity එක නැති නිසා දැනට AnimationActivity එකට යොමු කළා
+                // Since there is no AssemblageArtActivity here, I have referred to AnimationActivity for now.
                 Intent intent = new Intent(CourseActivity.this, AnimationActivity.class);
                 startActivity(intent);
             }
