@@ -25,7 +25,7 @@ public class teacherSignUp extends AppCompatActivity {
     Spinner artSpinner;
     CircleImageView profileImage;
     ActivityResultLauncher<String> galleryLauncher;
-    Button registerBtn; // Added variable for your button
+    Button registerBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +60,10 @@ public class teacherSignUp extends AppCompatActivity {
         });
 
 
-//        registerBtn.setOnClickListener(v -> {
-//            Intent intent = new Intent(teacherSignUp.this, ViewUpload.class);
-//            startActivity(intent);
-//        });
+        registerBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(teacherSignUp.this, ViewUploadActivity.class);
+            startActivity(intent);
+        });
 
 
         String[] artTypes = {"Art type", "Pencil art", "Coloring art", "Assemblage art"};
