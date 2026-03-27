@@ -18,30 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
+
+
         <activity
-            android:name=".teacherSignUp"
-            android:exported="false" />
-        <activity
-            android:name=".ViewUploadActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SelectionTypeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".NaturalArtActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AnimalArtActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AnimationActivity"
+            android:name=".AssemblageArtActivity"
             android:exported="false" />
         <activity
             android:name=".PencilArtActivity"
             android:exported="false" />
-        <activity
-            android:name=".PenArtActivity"
-            android:exported="false" />
+
         <activity
             android:name=".ColorArtActivity"
             android:exported="false" />
