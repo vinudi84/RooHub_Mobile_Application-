@@ -29,6 +29,8 @@ public class teacherSignUp extends AppCompatActivity {
     ActivityResultLauncher<String> galleryLauncher;
     Button registerBtn;
 
+    TextView LoginLink;
+
     EditText etName, etEmail, etQualifications, etPassword;
     Uri selectedImageUri;
 
@@ -46,12 +48,18 @@ public class teacherSignUp extends AppCompatActivity {
         artSpinner = findViewById(R.id.artSpinner);
         profileImage = findViewById(R.id.profileImage);
         registerBtn = findViewById(R.id.registerBtn);
+        LoginLink = findViewById(R.id.LoginLink);
 
         // Match IDs with XML
         etName = findViewById(R.id.name);
         etEmail = findViewById(R.id.email);
         etQualifications = findViewById(R.id.qualification);
         etPassword = findViewById(R.id.password);
+
+        LoginLink.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(teacherSignUp.this, LoginActivity.class);
+            startActivity(loginIntent);
+        });
 
         // Initialize the Gallery Launcher
         galleryLauncher = registerForActivityResult(
