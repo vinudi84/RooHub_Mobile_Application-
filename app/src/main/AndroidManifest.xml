@@ -42,6 +42,7 @@
         <activity
             android:name=".CourseActivity"
             android:exported="false" />
+
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
