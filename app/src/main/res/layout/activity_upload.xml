@@ -1,107 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/uploadPage"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7A8C4"
-    android:padding="20dp">
+    android:background="#F7C8D9"> <!-- Background color poddak change kala lassanata -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#F37199"
-        android:padding="20dp"
-        android:elevation="6dp">
+        android:padding="20dp">
 
-        <!-- Page Title -->
-        <TextView
-            android:id="@+id/txtTitle"
+        <!-- Custom Top Navigation -->
+        <Button
+            android:id="@+id/btnGoToProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload Art"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="#AC1754"
-            android:layout_gravity="center"
-            android:layout_marginBottom="20dp" />
+            android:text="Your Profile"
+            android:backgroundTint="#AC1754"
+            android:layout_gravity="end"
+            android:layout_marginBottom="15dp"/>
 
-        <!-- Image Preview -->
-        <ImageView
-            android:id="@+id/imagePreview"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="#E53888"
-            android:scaleType="centerCrop"
-            android:contentDescription="Uploaded Image"
-            android:padding="6dp"
-            android:layout_marginBottom="10dp" />
-
-
-
-
-        <!-- Art Name -->
-        <EditText
-            android:id="@+id/etArtName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Art Name"
-            android:layout_marginTop="20dp"
-            android:padding="12dp"
-            android:background="#F7A8C4"
-            android:inputType="text" />
-
-        <!-- Description -->
-        <EditText
-            android:id="@+id/etDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Description"
-            android:layout_marginTop="15dp"
-            android:padding="12dp"
-            android:background="#F7A8C4"
-            android:inputType="textMultiLine"
-            android:minLines="3" />
-
-        <!-- Buttons: Edit / Save / Cancel -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="25dp"
-            android:weightSum="3">
+            android:orientation="vertical"
+            android:background="#F37199"
+            android:padding="25dp"
+            android:elevation="8dp">
 
-            <Button
-                android:id="@+id/btnEdit"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Edit"
-                android:backgroundTint="#E53888"
-                android:textColor="#FFFFFF" />
+                android:text="Create Artist Profile"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#AC1754"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"/>
 
+            <!-- Profile Picture (Circular) -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="50dp"
+                app:cardElevation="4dp">
+
+                <ImageView
+                    android:id="@+id/profilePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@android:drawable/ic_menu_camera"
+                    android:scaleType="centerCrop"
+                    android:background="#E53888"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- User Inputs -->
+            <EditText
+                android:id="@+id/etUserEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email Address"
+                android:layout_marginTop="20dp"
+                android:padding="12dp"
+                android:background="#FAD1E0"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/etUserPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:layout_marginTop="10dp"
+                android:padding="12dp"
+                android:background="#FAD1E0"
+                android:inputType="textPassword" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#AC1754"
+                android:layout_marginVertical="20dp"/>
+
+            <!-- Art Upload Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload Your Art"
+                android:textStyle="bold"
+                android:textColor="#AC1754"/>
+
+            <EditText
+                android:id="@+id/etArtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Art Name"
+                android:layout_marginTop="10dp"
+                android:padding="12dp"
+                android:background="#FAD1E0" />
+
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Short Description"
+                android:layout_marginTop="10dp"
+                android:padding="12dp"
+                android:background="#FAD1E0"
+                android:minLines="2" />
+
+            <!-- Art Image Box -->
+            <ImageView
+                android:id="@+id/artImagePreview"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginTop="15dp"
+                android:background="#E53888"
+                android:src="@android:drawable/ic_menu_gallery"
+                android:scaleType="centerInside" />
+
+            <!-- Save Button -->
             <Button
                 android:id="@+id/btnSave"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Save"
-                android:backgroundTint="#E53888"
-                android:textColor="#FFFFFF"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp" />
-
-            <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Cancel"
-                android:backgroundTint="#E53888"
+                android:text="Save &amp; Go to Home"
+                android:layout_marginTop="25dp"
+                android:backgroundTint="#AC1754"
                 android:textColor="#FFFFFF" />
 
         </LinearLayout>
-
     </LinearLayout>
-
 </ScrollView>
