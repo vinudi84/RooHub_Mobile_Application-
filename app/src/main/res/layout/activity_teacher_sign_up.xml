@@ -73,8 +73,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@null" />
+                        android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -87,8 +86,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/qualification"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@null" />
+                        android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -102,8 +100,7 @@
                         android:id="@+id/email"
                         android:inputType="textEmailAddress"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@null" />
+                        android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -118,8 +115,7 @@
                         android:id="@+id/password"
                         android:inputType="textPassword"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@null" />
+                        android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Spinner
@@ -127,8 +123,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/circle_upload_btn"
-                    android:backgroundTint="#FFFFFF"
                     android:elevation="2dp"/>
 
                 <com.google.android.material.button.MaterialButton

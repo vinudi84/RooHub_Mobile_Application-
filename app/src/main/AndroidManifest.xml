@@ -19,7 +19,14 @@
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
 
+        <activity android:name=".ViewUploadActivity"
+            android:exported="false" />
 
+        <activity android:name=".teacherSignUp"
+            android:exported="false" />
+
+        <activity android:name=".SelectionTypeActivity"
+            android:exported="false" />
         <activity
             android:name=".AssemblageArtActivity"
             android:exported="false" />

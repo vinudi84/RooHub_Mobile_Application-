@@ -29,8 +29,7 @@ public class teacherSignUp extends AppCompatActivity {
     ActivityResultLauncher<String> galleryLauncher;
     Button registerBtn;
 
-    // Added EditText fields
-    EditText etName, etEmail, etQualifications;
+    EditText etName, etEmail, etQualifications, etPassword;
     Uri selectedImageUri;
 
     @Override
@@ -47,9 +46,12 @@ public class teacherSignUp extends AppCompatActivity {
         artSpinner = findViewById(R.id.artSpinner);
         profileImage = findViewById(R.id.profileImage);
         registerBtn = findViewById(R.id.registerBtn);
+
+        // Match IDs with XML
         etName = findViewById(R.id.name);
         etEmail = findViewById(R.id.email);
         etQualifications = findViewById(R.id.qualification);
+        etPassword = findViewById(R.id.password);
 
         // Initialize the Gallery Launcher
         galleryLauncher = registerForActivityResult(
@@ -57,7 +59,7 @@ public class teacherSignUp extends AppCompatActivity {
                 uri -> {
                     if (uri != null) {
                         profileImage.setImageURI(uri);
-                        selectedImageUri = uri; // Save URI to pass to next activity
+                        selectedImageUri = uri;
                     }
                 }
         );
@@ -76,6 +78,7 @@ public class teacherSignUp extends AppCompatActivity {
                 return;
             }
 
+            // Target Activity: ViewUploadActivity
             Intent intent = new Intent(teacherSignUp.this, ViewUploadActivity.class);
 
             // Passing data via Intent
