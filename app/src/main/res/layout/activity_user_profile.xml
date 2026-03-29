@@ -54,5 +54,12 @@
             android:text="Cancel" android:layout_marginTop="5dp"
             android:backgroundTint="#E53888" android:textColor="#FFFFFF"/>
 
+        <LinearLayout
+            android:id="@+id/artListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"/>
+
     </LinearLayout>
 </ScrollView>
