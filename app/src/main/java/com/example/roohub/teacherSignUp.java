@@ -74,31 +74,39 @@ public class teacherSignUp extends AppCompatActivity {
 
         profileImage.setOnClickListener(v -> galleryLauncher.launch("image/*"));
 
+        //register button
         registerBtn.setOnClickListener(v -> {
             String name = etName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             String qualifications = etQualifications.getText().toString().trim();
             String artType = artSpinner.getSelectedItem().toString();
 
-            // Simple Validation
+            // Validation
             if (name.isEmpty() || email.isEmpty() || artType.equals("Art type")) {
                 Toast.makeText(this, "Please fill required fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Target Activity: ViewUploadActivity
-            Intent intent = new Intent(teacherSignUp.this, ViewUploadActivity.class);
 
-            // Passing data via Intent
+            String imageStr = (selectedImageUri != null) ? selectedImageUri.toString() : null;
+
+
+            TeacherDataStore.allTeachers.add(new TeacherDataStore.Teacher(
+                    name,
+                    artType,
+                    qualifications,
+                    imageStr
+            ));
+
+
+            Intent intent = new Intent(teacherSignUp.this, ViewUploadActivity.class);
             intent.putExtra("teacher_name", name);
             intent.putExtra("teacher_email", email);
             intent.putExtra("art_type", artType);
             intent.putExtra("qualifications", qualifications);
-
             if (selectedImageUri != null) {
                 intent.putExtra("teacher_image", selectedImageUri.toString());
             }
-
             startActivity(intent);
         });
 
