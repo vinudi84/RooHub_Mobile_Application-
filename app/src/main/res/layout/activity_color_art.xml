@@ -1,16 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF9C4"
-    android:padding="20dp">
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Color Art Course"
+        android:textColor="#F57F17"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginBottom="10dp"
+        android:background="#000000">
+
+        <VideoView
+            android:id="@+id/videoPlayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/ivPlayButton"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:src="@android:drawable/ic_media_play"
+            android:contentDescription="Play Button"
+            android:alpha="0.8"
+            android:tint="#FFFFFF" />
+
+    </FrameLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Color Art Course"
-        android:textColor="#F57F17"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-</RelativeLayout>
+        android:text="Available Lessons:"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
+        android:textColor="#000000"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvColorVideos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
+
+</LinearLayout>
