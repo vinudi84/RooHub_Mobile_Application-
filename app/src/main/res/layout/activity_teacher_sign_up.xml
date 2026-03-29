@@ -136,6 +136,18 @@
                     android:backgroundTint="#F0544F"
                     app:cornerRadius="28dp"/>
 
+                <!-- Login Link -->
+                <TextView
+                    android:id="@+id/LoginLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="@string/login_link"
+                    android:textColor="#16476A"
+                    android:textSize="15sp" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

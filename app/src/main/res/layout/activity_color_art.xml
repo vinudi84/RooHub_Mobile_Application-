@@ -2,59 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF9C4"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:background="#F5F5F5">
 
     <TextView
-        android:id="@+id/tvHeader"
+        android:id="@+id/titleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="Color Art Course"
-        android:textColor="#F57F17"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Colour Art Teachers"
+        android:textColor="#424242"
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginBottom="10dp"
-        android:background="#000000">
-
-        <VideoView
-            android:id="@+id/videoPlayer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center" />
-
-        <ImageView
-            android:id="@+id/ivPlayButton"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            android:src="@android:drawable/ic_media_play"
-            android:contentDescription="Play Button"
-            android:alpha="0.8"
-            android:tint="#FFFFFF" />
-
-    </FrameLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Available Lessons:"
-        android:textStyle="bold"
-        android:layout_marginBottom="5dp"
-        android:textColor="#000000"/>
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvColorVideos"
+        android:id="@+id/recyclerViewColor"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="vertical" />
-
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@id/titleTv"
+        android:layout_marginTop="10dp"
+        android:padding="10dp" />
+</RelativeLayout>
