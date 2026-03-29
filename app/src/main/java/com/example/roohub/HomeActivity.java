@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 
 public class HomeActivity extends AppCompatActivity {
 
-
+    // Define UI elements
     ImageView signIn, logout;
     ImageButton upload;
     LinearLayout profile, course;
@@ -26,32 +26,30 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // UI Elements connect
-
+        // Initialize UI elements from XML
         signIn = findViewById(R.id.btnSignIn);
         logout = findViewById(R.id.btnLogout);
         upload = findViewById(R.id.btnUpload);
         profile = findViewById(R.id.btnProfile);
         course = findViewById(R.id.btnCourse);
-
         artContainer = findViewById(R.id.art_list_container);
 
-        // call function
-        loadUploadedArt();
+        // Go to User's own Profile (Normal Mode)
+        profile.setOnClickListener(v -> startActivity(new Intent(this, UserProfileActivity.class)));
 
-        // Navigation Buttons
-        profile.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
+        // Go to Upload Screen
         upload.setOnClickListener(v -> startActivity(new Intent(this, UploadActivity.class)));
+
+        // Go to Courses Screen
         course.setOnClickListener(v -> startActivity(new Intent(this, CourseActivity.class)));
 
-        // when click sing_in go to selection_type
+        // Go to Selection screen for Sign In
         signIn.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, SelectionTypeActivity.class);
             startActivity(intent);
         });
 
-
-        // Logout logic
+        // Logout and clear activity stack
         logout.setOnClickListener(v -> {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -60,26 +58,43 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh the art list every time the user comes back to Home
+        loadUploadedArt();
+    }
+
+    // Load all uploaded art data from SharedPreferences
     private void loadUploadedArt() {
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String allArt = prefs.getString("all_art_data", "");
 
+        artContainer.removeAllViews(); // Clear existing views before loading
+
         if (!allArt.isEmpty()) {
-            // "|||" identify tha post
+            // Split data by the separator
             String[] artItems = allArt.split("\\|\\|\\|");
 
             for (String item : artItems) {
-                // "###"  (Name, Type, Desc, Uri) are identify
                 String[] parts = item.split("###");
-                if (parts.length == 4) {
-                    addArtToUI(parts[0], parts[1], parts[2], parts[3]);
+
+                // Data format: Email###Pass###Name###Desc###ArtUri###ProfileUri
+                if (parts.length >= 5) {
+                    String uEmail = parts[0];   // Artist's Email
+                    String aName = parts[2];    // Art Name
+                    String aDesc = parts[3];    // Art Description
+                    String aUri = parts[4];     // Art Image URI
+
+                    addArtToUI(aName, uEmail, aDesc, aUri);
                 }
             }
         }
     }
 
-    private void addArtToUI(String name, String type, String desc, String uriString) {
-        // item_art_card.xml  = inflate
+    // Create a card for each art and add it to the Home screen
+    private void addArtToUI(String name, String ownerEmail, String desc, String uriString) {
+        // Inflate the custom card layout
         View artView = LayoutInflater.from(this).inflate(R.layout.item_art_card, artContainer, false);
 
         ImageView img = artView.findViewById(R.id.home_art_image);
@@ -87,15 +102,24 @@ public class HomeActivity extends AppCompatActivity {
         TextView txtType = artView.findViewById(R.id.home_art_type);
         TextView txtDesc = artView.findViewById(R.id.home_art_description);
 
-        // include data
         txtName.setText(name);
-        txtType.setText(type);
+        txtType.setText("Artist: " + ownerEmail);
         txtDesc.setText(desc);
 
-        // Glide use for pic
-        Glide.with(this).load(Uri.parse(uriString)).into(img);
+        // Load image using Glide library
+        Glide.with(this)
+                .load(Uri.parse(uriString))
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .into(img);
 
-        // lastly artContainer is card added
-        artContainer.addView(artView);
+        // IMPORTANT: When an image is clicked, open Profile in VIEW_ONLY mode
+        artView.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, UserProfileActivity.class);
+            intent.putExtra("LOGGED_EMAIL", ownerEmail); // Pass artist email
+            intent.putExtra("MODE", "VIEW_ONLY");        // Tell Profile screen this is a visitor
+            startActivity(intent);
+        });
+
+        artContainer.addView(artView); // Add the card to the container
     }
 }
