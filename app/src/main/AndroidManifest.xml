@@ -33,9 +33,6 @@
         <activity
             android:name=".PencilArtActivity"
             android:exported="false" />
-        <activity
-            android:name=".UserProfileActivity"
-            android:exported="false" />
 
         <activity
             android:name=".ColorArtActivity"
