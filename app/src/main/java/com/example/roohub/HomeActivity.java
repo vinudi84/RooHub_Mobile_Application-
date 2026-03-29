@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
         artContainer = findViewById(R.id.art_list_container);
 
         // Go to User's own Profile (Normal Mode)
-        profile.setOnClickListener(v -> startActivity(new Intent(this, UserProfileActivity.class)));
+        profile.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
 
         // Go to Upload Screen
         upload.setOnClickListener(v -> startActivity(new Intent(this, UploadActivity.class)));
