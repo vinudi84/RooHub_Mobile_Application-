@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,14 +20,15 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private EditText edtEmail, edtPass;
     private ImageView imgShowProfile;
-    private Button btnBack;
-    private LinearLayout artListContainer;
+    private Button btnUpdate, btnBack;
+    private TextView txtTitle;
+    private LinearLayout artListLayout;
 
-    private String loggedEmail, loggedPass;
+    private String loggedEmail, mode;
     private Uri tempUpdateUri = null;
     private ImageView tempUpdateImageView = null;
 
-    // පින්තූරය වෙනස් කිරීමට Launcher එකක්
+    // Image picker for updating artwork photos
     private final ActivityResultLauncher<String[]> updateArtLauncher =
             registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
                 if (uri != null && tempUpdateImageView != null) {
@@ -41,26 +43,41 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        // Link UI elements with XML IDs
         edtEmail = findViewById(R.id.edtEmail);
         edtPass = findViewById(R.id.edtPass);
         imgShowProfile = findViewById(R.id.imgShowProfile);
+        btnUpdate = findViewById(R.id.btnUpdate);
         btnBack = findViewById(R.id.btnBack);
+        txtTitle = findViewById(R.id.txtTitle);
+        artListLayout = findViewById(R.id.artListLayout);
 
-        // Art පෙන්වන Container එක සකස් කිරීම
-        artListContainer = new LinearLayout(this);
-        artListContainer.setOrientation(LinearLayout.VERTICAL);
-        ((LinearLayout) btnBack.getParent()).addView(artListContainer);
-
+        // Get info passed from HomeActivity
         loggedEmail = getIntent().getStringExtra("LOGGED_EMAIL");
-        loggedPass = getIntent().getStringExtra("LOGGED_PASS");
+        mode = getIntent().getStringExtra("MODE");
 
+        // Check if the user is just a visitor (VIEW_ONLY)
+        if ("VIEW_ONLY".equals(mode)) {
+            txtTitle.setText("Artist Profile"); // Change title
+            edtPass.setVisibility(View.GONE);    // Hide password
+
+            // HIDE THE BUTTONS YOU MENTIONED
+            btnUpdate.setVisibility(View.GONE);
+            btnBack.setVisibility(View.GONE);
+
+            edtEmail.setEnabled(false);         // Disable editing
+            edtEmail.setTextColor(Color.BLACK);
+        }
+
+        // Load content from storage
         loadAndDisplayUserContent();
 
+        // If not hidden, back button just closes the screen
         btnBack.setOnClickListener(v -> finish());
     }
 
     private void loadAndDisplayUserContent() {
-        artListContainer.removeAllViews();
+        artListLayout.removeAllViews();
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String allData = prefs.getString("all_art_data", "");
 
@@ -71,16 +88,15 @@ public class UserProfileActivity extends AppCompatActivity {
 
         for (String record : records) {
             String[] p = record.split("###");
-            if (p.length >= 6 && p[0].equals(loggedEmail) && p[1].equals(loggedPass)) {
 
+            // Match artworks belonging to the artist's email
+            if (p.length >= 6 && p[0].equals(loggedEmail)) {
                 if (isFirstMatch) {
                     edtEmail.setText(p[0]);
-                    edtPass.setText(p[1]);
                     if (!p[5].equals("no_profile")) imgShowProfile.setImageURI(Uri.parse(p[5]));
                     isFirstMatch = false;
                 }
-
-                // Art එක Edit කිරීමට අවශ්‍ය UI එක සාදයි
+                // Generate UI for each artwork
                 createArtItemUI(p[2], p[3], p[4], record);
             }
         }
@@ -91,93 +107,79 @@ public class UserProfileActivity extends AppCompatActivity {
         itemLayout.setOrientation(LinearLayout.VERTICAL);
         itemLayout.setPadding(30, 30, 30, 30);
         itemLayout.setBackgroundColor(Color.parseColor("#FAD1E0"));
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2);
         params.setMargins(0, 20, 0, 20);
         itemLayout.setLayoutParams(params);
 
-        // පින්තූරය පෙන්වන තැන
         ImageView iv = new ImageView(this);
         iv.setLayoutParams(new LinearLayout.LayoutParams(-1, 500));
         iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
         iv.setImageURI(Uri.parse(artUri));
 
-        // පින්තූරය මත Click කළ විට එය වෙනස් කිරීමට ඉඩ ලබාදීම
-        iv.setOnClickListener(v -> {
-            tempUpdateImageView = iv;
-            updateArtLauncher.launch(new String[]{"image/*"});
-        });
-
-        // නම වෙනස් කිරීමට EditText එකක්
         EditText etName = new EditText(this);
         etName.setText(name);
-        etName.setHint("Art Name");
-
-        // විස්තරය වෙනස් කිරීමට EditText එකක්
         EditText etDesc = new EditText(this);
         etDesc.setText(desc);
-        etDesc.setHint("Description");
 
-        // Update Button එක
-        Button btnUpdateArt = new Button(this);
-        btnUpdateArt.setText("Update This Art");
-        btnUpdateArt.setBackgroundColor(Color.BLUE);
-        btnUpdateArt.setTextColor(Color.WHITE);
-        btnUpdateArt.setOnClickListener(v -> {
-            String newName = etName.getText().toString().trim();
-            String newDesc = etDesc.getText().toString().trim();
-            String finalUri = (tempUpdateUri != null && tempUpdateImageView == iv) ? tempUpdateUri.toString() : artUri;
+        if ("VIEW_ONLY".equals(mode)) {
+            // Visitor mode: No editing, no action buttons
+            etName.setEnabled(false);
+            etDesc.setEnabled(false);
+            etName.setTextColor(Color.BLACK);
+            etDesc.setTextColor(Color.DKGRAY);
 
-            updateSpecificArt(fullRecord, newName, newDesc, finalUri);
-        });
+            itemLayout.addView(iv);
+            itemLayout.addView(etName);
+            itemLayout.addView(etDesc);
+        } else {
+            // Owner mode: Show Update/Delete buttons for each art
+            iv.setOnClickListener(v -> {
+                tempUpdateImageView = iv;
+                updateArtLauncher.launch(new String[]{"image/*"});
+            });
 
-        // Delete Button එක
-        Button btnDelete = new Button(this);
-        btnDelete.setText("Delete This Art");
-        btnDelete.setBackgroundColor(Color.RED);
-        btnDelete.setTextColor(Color.WHITE);
-        btnDelete.setOnClickListener(v -> deleteRecord(fullRecord));
+            Button bUpdate = new Button(this);
+            bUpdate.setText("Update Art");
+            bUpdate.setBackgroundColor(Color.BLUE);
+            bUpdate.setOnClickListener(v -> {
+                String finalUri = (tempUpdateUri != null && tempUpdateImageView == iv) ? tempUpdateUri.toString() : artUri;
+                updateSpecificArt(fullRecord, etName.getText().toString(), etDesc.getText().toString(), finalUri);
+            });
 
-        itemLayout.addView(new TextView(this){{setText("Tap Image to Change");}});
-        itemLayout.addView(iv);
-        itemLayout.addView(etName);
-        itemLayout.addView(etDesc);
-        itemLayout.addView(btnUpdateArt);
-        itemLayout.addView(btnDelete);
+            Button bDelete = new Button(this);
+            bDelete.setText("Delete Art");
+            bDelete.setBackgroundColor(Color.RED);
+            bDelete.setOnClickListener(v -> deleteRecord(fullRecord));
 
-        artListContainer.addView(itemLayout);
+            itemLayout.addView(iv);
+            itemLayout.addView(etName);
+            itemLayout.addView(etDesc);
+            itemLayout.addView(bUpdate);
+            itemLayout.addView(bDelete);
+        }
+
+        artListLayout.addView(itemLayout);
     }
 
     private void updateSpecificArt(String oldRecord, String newName, String newDesc, String newUri) {
-        if (newName.isEmpty() || newDesc.isEmpty()) {
-            Toast.makeText(this, "Fields cannot be empty!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String allData = prefs.getString("all_art_data", "");
-
         String[] p = oldRecord.split("###");
-        String newRecord = p[0] + "###" + p[1] + "###" + newName + "###" + newDesc + "###" + newUri + "###" + p[5];
 
+        String newRecord = p[0] + "###" + p[1] + "###" + newName + "###" + newDesc + "###" + newUri + "###" + p[5];
         String updatedAllData = allData.replace(oldRecord, newRecord);
 
         prefs.edit().putString("all_art_data", updatedAllData).apply();
-        Toast.makeText(this, "Art Updated Successfully!", Toast.LENGTH_SHORT).show();
-
-        tempUpdateUri = null; // Reset temp URI
-        loadAndDisplayUserContent(); // UI  Refresh
+        Toast.makeText(this, "Updated!", Toast.LENGTH_SHORT).show();
+        loadAndDisplayUserContent();
     }
 
     private void deleteRecord(String recordToDelete) {
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String allData = prefs.getString("all_art_data", "");
         String newData = allData.replace(recordToDelete, "").replace("||||||", "|||");
-
-        if (newData.startsWith("|||")) newData = newData.substring(3);
-        if (newData.endsWith("|||")) newData = newData.substring(0, newData.length() - 3);
-
         prefs.edit().putString("all_art_data", newData).apply();
-        Toast.makeText(this, "Deleted!", Toast.LENGTH_SHORT).show();
         loadAndDisplayUserContent();
     }
 }
