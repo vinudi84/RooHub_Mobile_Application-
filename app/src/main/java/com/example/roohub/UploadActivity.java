@@ -24,28 +24,21 @@ public class UploadActivity extends AppCompatActivity {
     private Uri profileUri = null;
     private Uri artUri = null;
 
-    // Profile Image Launcher - මෙහිදී OpenDocument පාවිච්චි කර ඇත (Permission ස්ථිර කිරීමට)
     private final ActivityResultLauncher<String[]> profileLauncher =
             registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
                 if (uri != null) {
                     profileUri = uri;
                     profilePreview.setImageURI(uri);
-
-                    // වැදගත්: Permission ස්ථිර කරගැනීම (Crash එක වැළැක්වීමට)
-                    getContentResolver().takePersistableUriPermission(uri,
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 }
             });
 
-    // Art Image Launcher
     private final ActivityResultLauncher<String[]> artLauncher =
             registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
                 if (uri != null) {
                     artUri = uri;
                     artImagePreview.setImageURI(uri);
-
-                    getContentResolver().takePersistableUriPermission(uri,
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 }
             });
 
@@ -54,7 +47,6 @@ public class UploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
-        // Initialize Views
         profilePreview = findViewById(R.id.profilePreview);
         artImagePreview = findViewById(R.id.artImagePreview);
         etUserEmail = findViewById(R.id.etUserEmail);
@@ -64,79 +56,55 @@ public class UploadActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         btnGoToProfile = findViewById(R.id.btnGoToProfile);
 
-        // Selection listeners - මෙහිදී String array එකක් යැවිය යුතුය
         profilePreview.setOnClickListener(v -> profileLauncher.launch(new String[]{"image/*"}));
         artImagePreview.setOnClickListener(v -> artLauncher.launch(new String[]{"image/*"}));
 
-        // Save Logic (ඔයාගේ කලින් තිබුණු logic එකමයි)
         btnSave.setOnClickListener(v -> {
             String email = etUserEmail.getText().toString().trim();
-            String password = etUserPassword.getText().toString().trim();
+            String pass = etUserPassword.getText().toString().trim();
             String artName = etArtName.getText().toString().trim();
             String desc = etDescription.getText().toString().trim();
 
-            if (artUri == null || artName.isEmpty() || email.isEmpty()) {
-                Toast.makeText(this, "Please fill required details!", Toast.LENGTH_SHORT).show();
+            if (email.isEmpty() || pass.isEmpty() || artName.isEmpty() || artUri == null) {
+                Toast.makeText(this, "Fields cannot be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            String pUri = (profileUri != null) ? profileUri.toString() : "no_profile";
+
+            // Format: Email###Password###ArtName###Description###ArtUri###ProfileUri
+            String newData = email + "###" + pass + "###" + artName + "###" + desc + "###" + artUri.toString() + "###" + pUri;
+
             SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+            String existingData = prefs.getString("all_art_data", "");
+
             SharedPreferences.Editor editor = prefs.edit();
-
-            editor.putString("user_email", email);
-            editor.putString("user_password", password);
-            if (profileUri != null) editor.putString("profile_pic", profileUri.toString());
-
-            // කලින් තිබූ format එක (### සහ |||)
-            String newData = artName + "###Art###" + desc + "###" + artUri.toString();
-            String existingArt = prefs.getString("all_art_data", "");
-            editor.putString("all_art_data", existingArt.isEmpty() ? newData : newData + "|||" + existingArt);
-
+            editor.putString("all_art_data", existingData.isEmpty() ? newData : existingData + "|||" + newData);
             editor.apply();
 
-            Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, HomeActivity.class));
-            finish();
+            Toast.makeText(this, "Saved Successfully!", Toast.LENGTH_SHORT).show();
         });
 
-        // Popup Verification and Navigation
         btnGoToProfile.setOnClickListener(v -> {
-            SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-            String savedEmail = prefs.getString("user_email", "");
-            String savedPass = prefs.getString("user_password", "");
-
-            if (savedEmail.isEmpty()) {
-                Toast.makeText(this, "No profile found!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Verify to Edit Profile");
-
+            builder.setTitle("Verification");
             LinearLayout layout = new LinearLayout(this);
             layout.setOrientation(LinearLayout.VERTICAL);
             layout.setPadding(50, 20, 50, 10);
 
-            final EditText inputEmail = new EditText(this);
-            inputEmail.setHint("Email");
-            layout.addView(inputEmail);
-
-            final EditText inputPass = new EditText(this);
-            inputPass.setHint("Password");
-            inputPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            layout.addView(inputPass);
+            final EditText inEmail = new EditText(this); inEmail.setHint("Email");
+            layout.addView(inEmail);
+            final EditText inPass = new EditText(this); inPass.setHint("Password");
+            inPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            layout.addView(inPass);
 
             builder.setView(layout);
-
-            builder.setPositiveButton("Next", (dialog, which) -> {
-                if (inputEmail.getText().toString().equals(savedEmail) &&
-                        inputPass.getText().toString().equals(savedPass)) {
-                    startActivity(new Intent(UploadActivity.this, UserProfileActivity.class));
-                } else {
-                    Toast.makeText(this, "Wrong Credentials!", Toast.LENGTH_SHORT).show();
-                }
+            builder.setPositiveButton("Verify", (dialog, which) -> {
+                Intent intent = new Intent(this, UserProfileActivity.class);
+                intent.putExtra("LOGGED_EMAIL", inEmail.getText().toString());
+                intent.putExtra("LOGGED_PASS", inPass.getText().toString());
+                startActivity(intent);
             });
-            builder.setNegativeButton("Cancel", null);
             builder.show();
         });
     }

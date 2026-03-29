@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 
 public class HomeActivity extends AppCompatActivity {
 
-
     ImageView signIn, logout;
     ImageButton upload;
     LinearLayout profile, course;
@@ -27,31 +26,24 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         // UI Elements connect
-
         signIn = findViewById(R.id.btnSignIn);
         logout = findViewById(R.id.btnLogout);
         upload = findViewById(R.id.btnUpload);
         profile = findViewById(R.id.btnProfile);
         course = findViewById(R.id.btnCourse);
-
         artContainer = findViewById(R.id.art_list_container);
 
-        // call function
-        loadUploadedArt();
-
         // Navigation Buttons
+
         profile.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
         upload.setOnClickListener(v -> startActivity(new Intent(this, UploadActivity.class)));
         course.setOnClickListener(v -> startActivity(new Intent(this, CourseActivity.class)));
 
-        // when click sing_in go to selection_type
         signIn.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, SelectionTypeActivity.class);
             startActivity(intent);
         });
 
-
-        // Logout logic
         logout.setOnClickListener(v -> {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -60,42 +52,65 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        loadUploadedArt();
+    }
+
     private void loadUploadedArt() {
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String allArt = prefs.getString("all_art_data", "");
 
+
+        artContainer.removeAllViews();
+
         if (!allArt.isEmpty()) {
-            // "|||" identify tha post
             String[] artItems = allArt.split("\\|\\|\\|");
 
             for (String item : artItems) {
-                // "###"  (Name, Type, Desc, Uri) are identify
+                // UploadActivity  format : Email###Pass###Name###Desc###ArtUri###ProfileUri
                 String[] parts = item.split("###");
-                if (parts.length == 4) {
-                    addArtToUI(parts[0], parts[1], parts[2], parts[3]);
+
+
+                if (parts.length >= 5) {
+                    String uEmail = parts[0];   // Email (Owner)
+                    String aName = parts[2];    // Art Name
+                    String aDesc = parts[3];    // Description
+                    String aUri = parts[4];     // Art Image URI
+
+                    addArtToUI(aName, uEmail, aDesc, aUri);
                 }
             }
         }
     }
 
-    private void addArtToUI(String name, String type, String desc, String uriString) {
-        // item_art_card.xml  = inflate
+    private void addArtToUI(String name, String owner, String desc, String uriString) {
+        // item_art_card.xml inflate do
         View artView = LayoutInflater.from(this).inflate(R.layout.item_art_card, artContainer, false);
 
         ImageView img = artView.findViewById(R.id.home_art_image);
         TextView txtName = artView.findViewById(R.id.home_art_name);
-        TextView txtType = artView.findViewById(R.id.home_art_type);
+        TextView txtType = artView.findViewById(R.id.home_art_type); // මෙහි Artist ගේ නම පෙන්වමු
         TextView txtDesc = artView.findViewById(R.id.home_art_description);
 
-        // include data
+        // Data include
         txtName.setText(name);
-        txtType.setText(type);
+        txtType.setText("Artist: " + owner);
         txtDesc.setText(desc);
 
-        // Glide use for pic
-        Glide.with(this).load(Uri.parse(uriString)).into(img);
+        // Glide use shoe pic
+        try {
+            Glide.with(this)
+                    .load(Uri.parse(uriString))
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .error(android.R.drawable.stat_notify_error)
+                    .into(img);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        // lastly artContainer is card added
         artContainer.addView(artView);
     }
 }
