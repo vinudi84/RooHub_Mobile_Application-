@@ -3,76 +3,35 @@ package com.example.roohub;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AssemblageArtActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private VideoAdapter adapter;
-    private ArrayList<VideoModel> videoList;
-    private VideoView videoPlayer;
-    private ImageView ivPlayButton;
+    RecyclerView recyclerView;
+    TeacherAdapter adapter;
+    List<TeacherDataStore.Teacher> filteredList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assemblage_art);
 
-        videoPlayer = findViewById(R.id.videoPlayerAss);
-        ivPlayButton = findViewById(R.id.ivPlayButtonAss);
-        recyclerView = findViewById(R.id.rvAssVideos);
-
+        recyclerView = findViewById(R.id.recyclerViewAssemblage);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        videoList = new ArrayList<>();
 
-        MediaController mediaController = new MediaController(this);
-        mediaController.setAnchorView(videoPlayer);
-        videoPlayer.setMediaController(mediaController);
 
-        // Fetch Data using "Assemblage art" key (matching friend's spinner)
-        SharedPreferences sharedPreferences = getSharedPreferences("RooHubData", MODE_PRIVATE);
-        String savedData = sharedPreferences.getString("Assemblage art", "");
-
-        if (!savedData.isEmpty()) {
-            String[] entries = savedData.split("###");
-            for (String entry : entries) {
-                if (!entry.isEmpty()) {
-                    String[] parts = entry.split("\\|");
-                    if (parts.length >= 3) {
-                        videoList.add(new VideoModel(parts[0], parts[1], parts[2]));
-                    }
-                }
+        for (TeacherDataStore.Teacher teacher : TeacherDataStore.allTeachers) {
+            if (teacher.artType.equals("Assemblage art")) {
+                filteredList.add(teacher);
             }
         }
 
-        if (!videoList.isEmpty()) {
-            loadVideoPreview(videoList.get(0).getVideoUri());
-        }
 
-        ivPlayButton.setOnClickListener(v -> {
-            videoPlayer.start();
-            ivPlayButton.setVisibility(View.GONE);
-        });
-
-        adapter = new VideoAdapter(videoList, this, model -> {
-            loadVideoPreview(model.getVideoUri());
-        });
-
+        adapter = new TeacherAdapter(filteredList);
         recyclerView.setAdapter(adapter);
-        videoPlayer.setOnCompletionListener(mp -> ivPlayButton.setVisibility(View.VISIBLE));
-    }
-
-    private void loadVideoPreview(String uriString) {
-        Uri videoUri = Uri.parse(uriString);
-        videoPlayer.setVideoURI(videoUri);
-        videoPlayer.seekTo(1);
-        ivPlayButton.setVisibility(View.VISIBLE);
     }
 }

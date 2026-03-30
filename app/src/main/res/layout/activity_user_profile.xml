@@ -13,6 +13,7 @@
         android:gravity="center">
 
         <TextView
+            android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit Your Profile"
@@ -44,6 +45,7 @@
             android:background="#FFFFFF" android:padding="12dp"
             android:inputType="textPassword"/>
 
+        <!-- These are the buttons that will be hidden in VIEW_ONLY mode -->
         <Button android:id="@+id/btnUpdate"
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="Save Changes" android:layout_marginTop="20dp"
@@ -54,8 +56,9 @@
             android:text="Cancel" android:layout_marginTop="5dp"
             android:backgroundTint="#E53888" android:textColor="#FFFFFF"/>
 
+        <!-- Container where artworks will be listed -->
         <LinearLayout
-            android:id="@+id/artListContainer"
+            android:id="@+id/artListLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
