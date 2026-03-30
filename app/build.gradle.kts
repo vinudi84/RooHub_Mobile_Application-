@@ -45,4 +45,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
+    implementation("com.google.code.gson:gson:2.10.1")
+
 }

@@ -3,18 +3,18 @@ package com.example.roohub;
 // This class acts as a container for our video data
 public class VideoModel {
     private String title;
-    private String description;
-    private String videoUri;
+    private String videoUri;   // Swapped order to match TeacherDetailActivity logic
+    private String teacherEmail;
 
     // Constructor to initialize the data
-    public VideoModel(String title, String description, String videoUri) {
+    public VideoModel(String title, String videoUri, String teacherEmail) {
         this.title = title;
-        this.description = description;
         this.videoUri = videoUri;
+        this.teacherEmail = teacherEmail;
     }
 
     // Getters to retrieve the data
     public String getTitle() { return title; }
-    public String getDescription() { return description; }
     public String getVideoUri() { return videoUri; }
+    public String getTeacherEmail() { return teacherEmail; }
 }
