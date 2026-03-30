@@ -19,28 +19,60 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
-
-        <activity android:name=".ViewUploadActivity" android:exported="false" />
-        <activity android:name=".teacherSignUp" android:exported="false" />
-        <activity android:name=".SelectionTypeActivity" android:exported="false" />
-        <activity android:name=".AssemblageArtActivity" android:exported="false" />
-        <activity android:name=".PencilArtActivity" android:exported="false" />
-        <activity android:name=".ColorArtActivity" android:exported="false" />
-        <activity android:name=".CourseActivity" android:exported="false" />
-        <activity android:name=".ProfileActivity" android:exported="false" />
-        <activity android:name=".UploadActivity" android:exported="false" />
-        <activity android:name=".HomeActivity" android:exported="false" />
-        <activity android:name=".EditProfileActivity" android:exported="false" />
-        <activity android:name=".RegisterActivity" android:exported="false" />
-
+        <activity
+            android:name=".VideoPlayerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TeacherDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewUploadActivity"
+            android:exported="false" />
+         <activity
+         android:name=".teacherSignUp"
+         android:exported="false" />
+        <activity
+            android:name=".SelectionTypeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AssemblageArtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PencilArtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ColorArtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CourseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UploadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
+
 </manifest>

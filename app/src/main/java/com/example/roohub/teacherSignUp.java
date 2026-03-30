@@ -1,6 +1,7 @@
 package com.example.roohub;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+// --- NEW IMPORTS FOR GSON ---
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class teacherSignUp extends AppCompatActivity {
@@ -28,9 +35,7 @@ public class teacherSignUp extends AppCompatActivity {
     CircleImageView profileImage;
     ActivityResultLauncher<String> galleryLauncher;
     Button registerBtn;
-
     TextView LoginLink;
-
     EditText etName, etEmail, etQualifications, etPassword;
     Uri selectedImageUri;
 
@@ -49,8 +54,6 @@ public class teacherSignUp extends AppCompatActivity {
         profileImage = findViewById(R.id.profileImage);
         registerBtn = findViewById(R.id.registerBtn);
         LoginLink = findViewById(R.id.LoginLink);
-
-        // Match IDs with XML
         etName = findViewById(R.id.name);
         etEmail = findViewById(R.id.email);
         etQualifications = findViewById(R.id.qualification);
@@ -61,7 +64,6 @@ public class teacherSignUp extends AppCompatActivity {
             startActivity(loginIntent);
         });
 
-        // Initialize the Gallery Launcher
         galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 uri -> {
@@ -74,54 +76,71 @@ public class teacherSignUp extends AppCompatActivity {
 
         profileImage.setOnClickListener(v -> galleryLauncher.launch("image/*"));
 
-        //register button
+        // Register button logic
         registerBtn.setOnClickListener(v -> {
             String name = etName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             String qualifications = etQualifications.getText().toString().trim();
             String artType = artSpinner.getSelectedItem().toString();
 
-            // Validation
             if (name.isEmpty() || email.isEmpty() || artType.equals("Art type")) {
                 Toast.makeText(this, "Please fill required fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            String imageStr = (selectedImageUri != null) ? selectedImageUri.toString() : "";
 
-            String imageStr = (selectedImageUri != null) ? selectedImageUri.toString() : null;
+            // --- STEP 1: LOAD EXISTING TEACHERS LIST USING GSON ---
+            SharedPreferences pref = getSharedPreferences("RooHubData", MODE_PRIVATE);
+            Gson gson = new Gson();
+            String json = pref.getString("teachers_list", null);
 
+            ArrayList<TeacherDataStore.Teacher> teacherList;
+            if (json == null) {
+                teacherList = new ArrayList<>(); // Create new list if empty
+            } else {
+                Type type = new TypeToken<ArrayList<TeacherDataStore.Teacher>>() {}.getType();
+                teacherList = gson.fromJson(json, type); // Convert JSON string back to List
+            }
 
-            TeacherDataStore.allTeachers.add(new TeacherDataStore.Teacher(
-                    name,
-                    artType,
-                    qualifications,
-                    imageStr
+            // --- STEP 2: ADD NEW TEACHER TO THE LIST ---
+            teacherList.add(new TeacherDataStore.Teacher(
+                    name, email, qualifications, artType, qualifications, imageStr
             ));
 
+            // --- STEP 3: SAVE UPDATED LIST BACK TO SHAREDPREFERENCES ---
+            String updatedJson = gson.toJson(teacherList);
+            pref.edit().putString("teachers_list", updatedJson).apply();
 
+            // Also update the current login profile for ViewUploadActivity
+            SharedPreferences profilePref = getSharedPreferences("TeacherProfile", MODE_PRIVATE);
+            SharedPreferences.Editor editor = profilePref.edit();
+            editor.putString("t_name", name);
+            editor.putString("t_email", email);
+            editor.putString("t_art_type", artType);
+            editor.putString("t_qualify", qualifications);
+            editor.putString("t_image", imageStr);
+            editor.apply();
+
+            // Navigate to ViewUploadActivity
             Intent intent = new Intent(teacherSignUp.this, ViewUploadActivity.class);
             intent.putExtra("teacher_name", name);
             intent.putExtra("teacher_email", email);
             intent.putExtra("art_type", artType);
             intent.putExtra("qualifications", qualifications);
-            if (selectedImageUri != null) {
-                intent.putExtra("teacher_image", selectedImageUri.toString());
+            if (!imageStr.isEmpty()) {
+                intent.putExtra("teacher_image", imageStr);
             }
             startActivity(intent);
+
+            Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show();
         });
 
+        // Setup Spinner for Art Types
         String[] artTypes = {"Art type", "Pencil art", "Coloring art", "Assemblage art"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_spinner_item,
-                artTypes
-        ) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, artTypes) {
             @Override
-            public boolean isEnabled(int position) {
-                return position != 0;
-            }
-
+            public boolean isEnabled(int position) { return position != 0; }
             @Override
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
@@ -130,7 +149,6 @@ public class teacherSignUp extends AppCompatActivity {
                 return view;
             }
         };
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         artSpinner.setAdapter(adapter);
     }

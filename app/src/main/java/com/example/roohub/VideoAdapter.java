@@ -15,7 +15,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     private Context context;
     private OnItemClickListener listener;
 
-    // Interface to handle clicks
     public interface OnItemClickListener {
         void onItemClick(VideoModel model);
     }
@@ -29,17 +28,20 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     @NonNull
     @Override
     public VideoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_2, parent, false);
+        // --- UPDATED: Using our custom card layout instead of simple_list_item_2 ---
+        View view = LayoutInflater.from(context).inflate(R.layout.item_video_card, parent, false);
         return new VideoViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
         VideoModel video = videoList.get(position);
-        holder.text1.setText(video.getTitle());
-        holder.text2.setText(video.getDescription());
 
-        // When an item is clicked, send the video data back to the Activity
+        // --- UPDATED: Binding data to our new XML views ---
+        holder.textViewTitle.setText(video.getTitle());
+        holder.textViewPlayHint.setText("Tap to play video"); // Better UX
+
+        // Click listener for the entire card
         holder.itemView.setOnClickListener(v -> listener.onItemClick(video));
     }
 
@@ -49,11 +51,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     }
 
     public static class VideoViewHolder extends RecyclerView.ViewHolder {
-        TextView text1, text2;
+        // --- UPDATED: Views match the IDs in item_video_card.xml ---
+        TextView textViewTitle, textViewPlayHint;
+
         public VideoViewHolder(@NonNull View itemView) {
             super(itemView);
-            text1 = itemView.findViewById(android.R.id.text1);
-            text2 = itemView.findViewById(android.R.id.text2);
+            textViewTitle = itemView.findViewById(R.id.textViewTitle);
+            textViewPlayHint = itemView.findViewById(R.id.textViewPlayHint);
         }
     }
 }
