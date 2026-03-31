@@ -42,10 +42,10 @@ public class ViewUploadActivity extends AppCompatActivity {
         Button btnSelectVideo = findViewById(R.id.btnSelectVideo);
         Button btnUpload = findViewById(R.id.btnUpload);
 
-        // --- STEP 1: FETCH SAVED TEACHER DATA ---
+        // --- STEP 1: FETCH SAVED TEACHER DATA FROM SHAREDPREFERENCES ---
         SharedPreferences teacherPref = getSharedPreferences("TeacherProfile", MODE_PRIVATE);
         String savedName = teacherPref.getString("t_name", "Unknown Teacher");
-        String savedEmail = teacherPref.getString("t_email", "No Email"); // Crucial for unique identification
+        String savedEmail = teacherPref.getString("t_email", "No Email");
         String savedQual = teacherPref.getString("t_qualify", "");
         String savedImage = teacherPref.getString("t_image", null);
         String savedArtType = teacherPref.getString("t_art_type", "Pencil art");
@@ -53,16 +53,24 @@ public class ViewUploadActivity extends AppCompatActivity {
         tvName.setText("Name: " + savedName);
         tvEmail.setText("Email: " + savedEmail);
         tvQualifications.setText("Qualifications: " + savedQual);
+
+        // Safety check for loading profile image with SecurityException handling
         if (savedImage != null) {
-            ivTeacherProfile.setImageURI(Uri.parse(savedImage));
+            try {
+                ivTeacherProfile.setImageURI(Uri.parse(savedImage));
+            } catch (Exception e) {
+                // Fallback to default icon if URI access is denied or null
+                ivTeacherProfile.setImageResource(R.drawable.ic_launcher_background);
+            }
         }
 
-        // --- STEP 2: CONFIGURE SPINNER ---
+        // --- STEP 2: CONFIGURE SPINNER FOR ART CATEGORIES ---
         String[] categories = {"Pencil art", "Coloring art", "Assemblage art"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnArtType.setAdapter(adapter);
 
+        // Auto-select the teacher's registered art type in the spinner
         for (int i = 0; i < categories.length; i++) {
             if (categories[i].equals(savedArtType)) {
                 spnArtType.setSelection(i);
@@ -70,14 +78,17 @@ public class ViewUploadActivity extends AppCompatActivity {
             }
         }
 
+        // Open Document intent to pick video from storage safely
         btnSelectVideo.setOnClickListener(v -> {
             Intent videoIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             videoIntent.addCategory(Intent.CATEGORY_OPENABLE);
             videoIntent.setType("video/*");
+            // Request long-term access permission flags
+            videoIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
             startActivityForResult(videoIntent, VIDEO_PICK_REQUEST);
         });
 
-        // --- STEP 3: UPLOAD LOGIC (UPDATED WITH EMAIL) ---
+        // --- STEP 3: UPLOAD LOGIC ---
         btnUpload.setOnClickListener(v -> {
             String artName = etArtName.getText().toString().trim();
             String artDesc = etVideoDetails.getText().toString().trim();
@@ -90,14 +101,8 @@ public class ViewUploadActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 try {
-                    // Granting long-term read access to avoid "Can't play video" error
-                    final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
-                    getContentResolver().takePersistableUriPermission(videoUri, takeFlags);
-
+                    // Update the global data store with the new video entry
                     String existingData = sharedPreferences.getString(selectedCategory, "");
-
-                    // NEW FORMAT: TeacherName | VideoTitle | Description | VideoUri | TeacherEmail ###
-                    // We added savedEmail at the end to correctly filter videos in TeacherDetailActivity
                     String newData = savedName + "|" + artName + "|" + artDesc + "|" + videoUri.toString() + "|" + savedEmail + "###";
                     String finalData = existingData + newData;
 
@@ -106,7 +111,7 @@ public class ViewUploadActivity extends AppCompatActivity {
 
                     Toast.makeText(this, "Video successfully added!", Toast.LENGTH_SHORT).show();
 
-                    // Navigate to respective category activity
+                    // Navigation logic based on the selected art category
                     Intent nextIntent;
                     if (selectedCategory.equalsIgnoreCase("Coloring art")) {
                         nextIntent = new Intent(ViewUploadActivity.this, ColorArtActivity.class);
@@ -116,7 +121,7 @@ public class ViewUploadActivity extends AppCompatActivity {
                         nextIntent = new Intent(ViewUploadActivity.this, AssemblageArtActivity.class);
                     }
                     startActivity(nextIntent);
-                    finish();
+                    finish(); // Close current activity after successful upload
 
                 } catch (Exception e) {
                     Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -125,28 +130,27 @@ public class ViewUploadActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.upload_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_view_edit) {
-            Intent intent = new Intent(ViewUploadActivity.this, teacherSignUp.class);
-            startActivity(intent);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    // REMOVED: onCreateOptionsMenu and onOptionsItemSelected to hide "VIEW & EDIT" button
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == VIDEO_PICK_REQUEST && resultCode == RESULT_OK && data != null) {
             videoUri = data.getData();
-            Toast.makeText(this, "Video selected!", Toast.LENGTH_SHORT).show();
+
+            if (videoUri != null) {
+                /* CRITICAL: Requesting permanent read permission for the selected video URI.
+                   This is essential to keep the video playable even after app restarts.
+                */
+                final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                try {
+                    getContentResolver().takePersistableUriPermission(videoUri, takeFlags);
+                    Toast.makeText(this, "Video selected and permission granted!", Toast.LENGTH_SHORT).show();
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Permission Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }
