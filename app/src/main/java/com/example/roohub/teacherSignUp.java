@@ -21,7 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-// --- NEW IMPORTS FOR GSON ---
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -33,7 +32,7 @@ public class teacherSignUp extends AppCompatActivity {
 
     Spinner artSpinner;
     CircleImageView profileImage;
-    ActivityResultLauncher<String> galleryLauncher;
+    ActivityResultLauncher<Intent> galleryLauncher; // Changed to Intent for OPEN_DOCUMENT
     Button registerBtn;
     TextView LoginLink;
     EditText etName, etEmail, etQualifications, etPassword;
@@ -64,17 +63,36 @@ public class teacherSignUp extends AppCompatActivity {
             startActivity(loginIntent);
         });
 
+        // --- UPDATED GALLERY LAUNCHER WITH PERSISTABLE PERMISSION ---
         galleryLauncher = registerForActivityResult(
-                new ActivityResultContracts.GetContent(),
-                uri -> {
-                    if (uri != null) {
-                        profileImage.setImageURI(uri);
-                        selectedImageUri = uri;
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri uri = result.getData().getData();
+                        if (uri != null) {
+                            try {
+                                // Requesting permanent read access to the image URI
+                                final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                                getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+                                profileImage.setImageURI(uri);
+                                selectedImageUri = uri;
+                            } catch (SecurityException e) {
+                                e.printStackTrace();
+                                Toast.makeText(this, "Permission Error: Could not save image access", Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
                 }
         );
 
-        profileImage.setOnClickListener(v -> galleryLauncher.launch("image/*"));
+        profileImage.setOnClickListener(v -> {
+            // Using ACTION_OPEN_DOCUMENT is mandatory for long-term (persistable) URI access
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            galleryLauncher.launch(intent);
+        });
 
         // Register button logic
         registerBtn.setOnClickListener(v -> {
@@ -90,29 +108,28 @@ public class teacherSignUp extends AppCompatActivity {
 
             String imageStr = (selectedImageUri != null) ? selectedImageUri.toString() : "";
 
-            // --- STEP 1: LOAD EXISTING TEACHERS LIST USING GSON ---
+            // --- SAVE TO TEACHERS LIST USING GSON ---
             SharedPreferences pref = getSharedPreferences("RooHubData", MODE_PRIVATE);
             Gson gson = new Gson();
             String json = pref.getString("teachers_list", null);
 
             ArrayList<TeacherDataStore.Teacher> teacherList;
             if (json == null) {
-                teacherList = new ArrayList<>(); // Create new list if empty
+                teacherList = new ArrayList<>();
             } else {
                 Type type = new TypeToken<ArrayList<TeacherDataStore.Teacher>>() {}.getType();
-                teacherList = gson.fromJson(json, type); // Convert JSON string back to List
+                teacherList = gson.fromJson(json, type);
             }
 
-            // --- STEP 2: ADD NEW TEACHER TO THE LIST ---
+            // Adding new teacher object to the list
             teacherList.add(new TeacherDataStore.Teacher(
                     name, email, qualifications, artType, qualifications, imageStr
             ));
 
-            // --- STEP 3: SAVE UPDATED LIST BACK TO SHAREDPREFERENCES ---
             String updatedJson = gson.toJson(teacherList);
             pref.edit().putString("teachers_list", updatedJson).apply();
 
-            // Also update the current login profile for ViewUploadActivity
+            // Update current login session profile
             SharedPreferences profilePref = getSharedPreferences("TeacherProfile", MODE_PRIVATE);
             SharedPreferences.Editor editor = profilePref.edit();
             editor.putString("t_name", name);
@@ -122,7 +139,7 @@ public class teacherSignUp extends AppCompatActivity {
             editor.putString("t_image", imageStr);
             editor.apply();
 
-            // Navigate to ViewUploadActivity
+            // Navigate to ViewUploadActivity with data
             Intent intent = new Intent(teacherSignUp.this, ViewUploadActivity.class);
             intent.putExtra("teacher_name", name);
             intent.putExtra("teacher_email", email);
@@ -134,6 +151,7 @@ public class teacherSignUp extends AppCompatActivity {
             startActivity(intent);
 
             Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show();
+            finish(); // Close sign up activity
         });
 
         // Setup Spinner for Art Types

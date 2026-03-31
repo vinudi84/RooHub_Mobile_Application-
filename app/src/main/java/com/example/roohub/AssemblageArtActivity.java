@@ -21,19 +21,22 @@ public class AssemblageArtActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assemblage_art);
 
+        // Hide the top action bar for a better look
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
+        // --- STEP 1: INITIALIZE UI COMPONENTS ---
         recyclerView = findViewById(R.id.rvAssVideos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         assTeachers = new ArrayList<>();
 
+        // --- STEP 2: LOAD FILTERED TEACHER DATA ---
         loadTeacherList();
     }
 
     private void loadTeacherList() {
-        // 1. Load the persistent teacher data
+        // Fetch saved JSON data from SharedPreferences
         SharedPreferences pref = getSharedPreferences("RooHubData", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = pref.getString("teachers_list", null);
@@ -42,14 +45,19 @@ public class AssemblageArtActivity extends AppCompatActivity {
             Type type = new TypeToken<ArrayList<TeacherDataStore.Teacher>>() {}.getType();
             ArrayList<TeacherDataStore.Teacher> allTeachers = gson.fromJson(json, type);
 
-            // 2. Filter for "Assemblage art"
-            for (TeacherDataStore.Teacher t : allTeachers) {
-                if (t.artType.equals("Assemblage art")) {
-                    assTeachers.add(t);
+            // --- STEP 3: FILTER FOR "Assemblage art" CATEGORY ---
+            if (allTeachers != null) {
+                for (TeacherDataStore.Teacher t : allTeachers) {
+                    // Check if artType matches "Assemblage art" (Case-insensitive check)
+                    if (t.artType != null && t.artType.equalsIgnoreCase("Assemblage art")) {
+                        assTeachers.add(t);
+                    }
                 }
             }
         }
 
+        // --- STEP 4: SETUP RECYCLERVIEW ADAPTER ---
+        // Pass 'this' as context to the adapter
         adapter = new TeacherAdapter(assTeachers, this);
         recyclerView.setAdapter(adapter);
     }

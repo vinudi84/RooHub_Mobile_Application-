@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class PencilArtActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private TeacherAdapter adapter; // Using TeacherAdapter to show teachers
+    private TeacherAdapter adapter;
     private ArrayList<TeacherDataStore.Teacher> pencilTeachers;
 
     @Override
@@ -21,19 +21,23 @@ public class PencilArtActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pencil_art);
 
+        // Hide the top ActionBar for a cleaner look
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        recyclerView = findViewById(R.id.rvPencilVideos); // Ensure this ID exists in your XML
+        // --- STEP 1: INITIALIZE RECYCLERVIEW ---
+        // Ensure this ID matches the one in your activity_pencil_art.xml
+        recyclerView = findViewById(R.id.rvPencilVideos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         pencilTeachers = new ArrayList<>();
 
+        // --- STEP 2: LOAD FILTERED TEACHER LIST ---
         loadTeacherList();
     }
 
     private void loadTeacherList() {
-        // 1. Get the full list of teachers from SharedPreferences
+        // Fetch saved JSON data from SharedPreferences
         SharedPreferences pref = getSharedPreferences("RooHubData", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = pref.getString("teachers_list", null);
@@ -42,15 +46,19 @@ public class PencilArtActivity extends AppCompatActivity {
             Type type = new TypeToken<ArrayList<TeacherDataStore.Teacher>>() {}.getType();
             ArrayList<TeacherDataStore.Teacher> allTeachers = gson.fromJson(json, type);
 
-            // 2. Filter teachers who belong to "Pencil art" category
-            for (TeacherDataStore.Teacher t : allTeachers) {
-                if (t.artType.equals("Pencil art")) {
-                    pencilTeachers.add(t);
+            // --- STEP 3: FILTER FOR "Pencil art" CATEGORY ---
+            if (allTeachers != null) {
+                for (TeacherDataStore.Teacher t : allTeachers) {
+                    // Check if artType matches "Pencil art" (Case-insensitive check)
+                    if (t.artType != null && t.artType.equalsIgnoreCase("Pencil art")) {
+                        pencilTeachers.add(t);
+                    }
                 }
             }
         }
 
-        // 3. Set the filtered list to the Adapter
+        // --- STEP 4: SET THE ADAPTER TO SHOW THE LIST ---
+        // Passing 'this' as the activity context
         adapter = new TeacherAdapter(pencilTeachers, this);
         recyclerView.setAdapter(adapter);
     }
