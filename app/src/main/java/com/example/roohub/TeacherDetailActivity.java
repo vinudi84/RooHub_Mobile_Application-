@@ -1,7 +1,6 @@
 package com.example.roohub;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -17,77 +16,47 @@ public class TeacherDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private VideoAdapter adapter;
     private ArrayList<VideoModel> filteredVideos;
-    private String teacherEmail, artCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_detail);
 
-        // Hide action bar for full screen experience
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        // --- 1. GET DATA FROM INTENT (Passed from TeacherAdapter) ---
+        // --- 1. GET DATA FROM INTENT ---
         String teacherName = getIntent().getStringExtra("teacher_name");
-        teacherEmail = getIntent().getStringExtra("teacher_email");
-        artCategory = getIntent().getStringExtra("art_category");
-        String teacherImage = getIntent().getStringExtra("teacher_image");
-        String teacherQual = getIntent().getStringExtra("teacher_qual");
+        String teacherEmail = getIntent().getStringExtra("teacher_email");
+        String artName = getIntent().getStringExtra("art_name");
+        String description = getIntent().getStringExtra("description");
+        String videoUri = getIntent().getStringExtra("video_uri");
+        String teacherImage = getIntent().getStringExtra("teacher_image"); // New Image URI
 
         // --- 2. SETUP UI ELEMENTS ---
         TextView tvName = findViewById(R.id.detailTeacherName);
         TextView tvQual = findViewById(R.id.detailTeacherQual);
         CircleImageView ivProfile = findViewById(R.id.detailTeacherImage);
 
-        // Setting the teacher's profile information
-        tvName.setText(teacherName != null ? teacherName : "Teacher");
-        tvQual.setText(teacherQual != null ? teacherQual : "No Qualifications");
+        tvName.setText(teacherName != null ? teacherName : "Unknown Instructor");
+        tvQual.setText(teacherEmail != null ? teacherEmail : "No Contact Info");
 
+        // --- LOAD PROFILE IMAGE ---
         if (teacherImage != null && !teacherImage.isEmpty()) {
             ivProfile.setImageURI(Uri.parse(teacherImage));
+        } else {
+            ivProfile.setImageResource(R.drawable.ic_launcher_background);
         }
 
-        // --- 3. RECYCLERVIEW SETUP ---
         recyclerView = findViewById(R.id.rvTeacherVideos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         filteredVideos = new ArrayList<>();
 
-        // Start loading videos belonging to this specific teacher
-        loadTeacherVideos();
-    }
-
-    private void loadTeacherVideos() {
-        SharedPreferences sharedPreferences = getSharedPreferences("RooHubData", MODE_PRIVATE);
-
-        // Use the artCategory to find the correct list of videos
-        if (artCategory != null) {
-            String savedData = sharedPreferences.getString(artCategory, "");
-
-            if (!savedData.isEmpty()) {
-                String[] entries = savedData.split("###");
-                for (String entry : entries) {
-                    if (!entry.isEmpty()) {
-                        String[] parts = entry.split("\\|");
-
-                        // Ensure we have all necessary parts (Title, Uri, Email etc.)
-                        if (parts.length >= 5) {
-                            String videoTitle = parts[1];
-                            String videoUri = parts[3];
-                            String videoOwnerEmail = parts[4];
-
-                            // FILTER: Only show videos where the owner email matches the selected teacher
-                            if (videoOwnerEmail != null && videoOwnerEmail.equals(teacherEmail)) {
-                                filteredVideos.add(new VideoModel(videoTitle, videoUri, teacherEmail));
-                            }
-                        }
-                    }
-                }
-            }
+        if (videoUri != null && !videoUri.isEmpty()) {
+            filteredVideos.add(new VideoModel(artName, videoUri, teacherEmail));
         }
 
-        // --- 4. ADAPTER SETUP ---
         adapter = new VideoAdapter(filteredVideos, this, model -> {
             playVideo(model.getVideoUri());
         });
@@ -99,25 +68,12 @@ public class TeacherDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Video link is empty", Toast.LENGTH_SHORT).show();
             return;
         }
-
         try {
-            Uri videoUri = Uri.parse(uriString);
-
-            // Gaining persistable URI permission to fix "Permission Denied" errors
-            // Note: This only works if the URI was picked via SAF (Storage Access Framework)
-            try {
-                getContentResolver().takePersistableUriPermission(videoUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            } catch (SecurityException se) {
-                // Ignore if we can't get persistable permission, just try to play
-            }
-
-            // Move to VideoPlayerActivity
             Intent intent = new Intent(this, VideoPlayerActivity.class);
             intent.putExtra("video_uri", uriString);
             startActivity(intent);
-
         } catch (Exception e) {
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error playing video: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }
