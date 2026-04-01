@@ -12,82 +12,72 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-// The Adapter class to manage the list of teachers and display them in a RecyclerView
 public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.ViewHolder> {
 
-    private final List<TeacherDataStore.Teacher> teacherList;
+    private final List<String> videoDataList;
     private final Context context;
 
-    // Constructor to initialize the teacher list and the context of the calling Activity
-    public TeacherAdapter(List<TeacherDataStore.Teacher> teacherList, Context context) {
-        this.teacherList = teacherList;
+    public TeacherAdapter(List<String> videoDataList, Context context) {
+        this.videoDataList = videoDataList;
         this.context = context;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the teacher_item.xml layout for each individual row
         View view = LayoutInflater.from(context).inflate(R.layout.teacher_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Get the specific teacher object for the current position
-        TeacherDataStore.Teacher teacher = teacherList.get(position);
+        String record = videoDataList.get(position);
 
-        if (teacher != null) {
-            // Set text data from the teacher object to the UI components
-            holder.name.setText(teacher.name);
-            holder.qual.setText(teacher.qualify);
-            holder.email.setText(teacher.email);
+        if (record != null && !record.isEmpty()) {
+            // New Format: Name|ArtName|Desc|VideoUri|Email|ProfileImageUri
+            String[] details = record.split("\\|");
 
-            /* CRITICAL UPDATE: Using try-catch to prevent "SecurityException" crashes.
-               Android often restricts permission to read image URIs across different activities.
-            */
-            try {
-                if (teacher.imageUri != null && !teacher.imageUri.isEmpty()) {
-                    // Try to load the image using the saved URI
-                    holder.image.setImageURI(Uri.parse(teacher.imageUri));
+            if (details.length >= 6) {
+                String teacherName = details[0];
+                String artName = details[1];
+                String description = details[2];
+                String videoUri = details[3];
+                String teacherEmail = details[4];
+                String profileImageUri = details[5]; // Extracting image URI
+
+                holder.name.setText("Teacher: " + teacherName);
+                holder.qual.setText("Art: " + artName);
+                holder.email.setText("Desc: " + description);
+
+                // --- SHOW TEACHER PROFILE IMAGE ---
+                if (profileImageUri != null && !profileImageUri.isEmpty()) {
+                    holder.image.setImageURI(Uri.parse(profileImageUri));
                 } else {
-                    // If no URI exists, show a default background image
                     holder.image.setImageResource(R.drawable.ic_launcher_background);
                 }
-            } catch (SecurityException e) {
-                // If permission to read the image is denied, show the default image instead of crashing
-                holder.image.setImageResource(R.drawable.ic_launcher_background);
-                e.printStackTrace();
-            }
 
-            // Click listener to navigate to the detailed view of the instructor
-            holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(context, TeacherDetailActivity.class);
-                // Pass the teacher's data to the Detail page using Extras
-                intent.putExtra("teacher_name", teacher.name);
-                intent.putExtra("teacher_email", teacher.email);
-                intent.putExtra("teacher_image", teacher.imageUri);
-                intent.putExtra("teacher_qual", teacher.qualify);
-                intent.putExtra("art_category", teacher.artType);
-                context.startActivity(intent);
-            });
+                holder.itemView.setOnClickListener(v -> {
+                    Intent intent = new Intent(context, TeacherDetailActivity.class);
+                    intent.putExtra("teacher_name", teacherName);
+                    intent.putExtra("art_name", artName);
+                    intent.putExtra("description", description);
+                    intent.putExtra("video_uri", videoUri);
+                    intent.putExtra("teacher_email", teacherEmail);
+                    intent.putExtra("teacher_image", profileImageUri); // Passing image URI
+                    context.startActivity(intent);
+                });
+            }
         }
     }
 
     @Override
-    public int getItemCount() {
-        // Return the total number of teachers in the list
-        return teacherList.size();
-    }
+    public int getItemCount() { return videoDataList.size(); }
 
-    // ViewHolder class to map and hold references to the views in teacher_item.xml
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView image;
         TextView name, qual, email;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Matching the view IDs defined in the teacher_item.xml file
             image = itemView.findViewById(R.id.itemImage);
             name = itemView.findViewById(R.id.itemName);
             qual = itemView.findViewById(R.id.itemQual);
