@@ -3,118 +3,129 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7A8C4"> <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#F7A8C4">
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#F2FFFFFF"
-        android:layout_marginBottom="20dp">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:padding="20dp">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="#F2FFFFFF"
+            android:layout_marginBottom="20dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Teacher Details"
-                android:textColor="#AC1754"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:layout_marginBottom="12dp"
-                android:layout_gravity="start"/>
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:padding="20dp">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:cardCornerRadius="50dp"
-                android:layout_marginBottom="10dp"
-                app:cardElevation="0dp">
-                <ImageView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Instructor Profile"
+                    android:textColor="#AC1754"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_gravity="start"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/ivTeacherProfile"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@android:drawable/ic_menu_gallery" />
-            </androidx.cardview.widget.CardView>
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@android:drawable/ic_menu_gallery"
+                    app:civ_border_color="#AC1754"
+                    app:civ_border_width="2dp"/>
 
-            <TextView android:id="@+id/tvName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Name: Pending..." android:textSize="18sp" android:textStyle="bold" android:textColor="#212121"/>
-            <TextView android:id="@+id/tvEmail" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Email: Pending..." android:layout_marginTop="6dp" android:textColor="#424242"/>
-            <TextView android:id="@+id/tvArtType" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Art Type: Pending..." android:layout_marginTop="6dp" android:textColor="#E53888" android:textStyle="bold"/>
-            <TextView android:id="@+id/tvQualifications" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Qualifications: Pending..." android:layout_marginTop="6dp" android:textColor="#424242"/>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <TextView android:id="@+id/tvName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Name: Loading..." android:textSize="18sp" android:textStyle="bold" android:textColor="#212121"/>
+                <TextView android:id="@+id/tvEmail" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Email: Loading..." android:layout_marginTop="4dp" android:textColor="#424242"/>
+                <TextView android:id="@+id/tvQualifications" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Qual: Loading..." android:layout_marginTop="4dp" android:textColor="#424242"/>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#F2FFFFFF">
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="#F2FFFFFF">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Upload Learning Material"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#AC1754"
-                android:layout_marginBottom="16dp" />
-
-            <Button
-                android:id="@+id/btnSelectVideo"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="SELECT VIDEO FILE"
-                android:backgroundTint="#E53888"
-                android:textColor="#FFFFFF" />
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <EditText
-                android:id="@+id/etArtName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Art Name"
-                android:layout_marginTop="16dp"
-                android:padding="12dp"
-                android:backgroundTint="#F37199"
-                android:background="@android:drawable/editbox_background"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Publish New Art Video"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#AC1754"
+                    android:layout_marginBottom="16dp" />
 
-            <EditText
-                android:id="@+id/etVideoDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Video Description"
-                android:layout_marginTop="12dp"
-                android:padding="12dp"
-                android:backgroundTint="#F37199"
-                android:background="@android:drawable/editbox_background"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Course Category:"
+                    android:textSize="12sp"
+                    android:textColor="#AC1754"
+                    android:layout_marginBottom="4dp"/>
 
-            <Button
-                android:id="@+id/btnUpload"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="UPLOAD TO COURSE"
-                android:layout_marginTop="20dp"
-                android:backgroundTint="#E53888"
-                android:textColor="#FFFFFF" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <Spinner
+                    android:id="@+id/spnArtType"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:backgroundTint="#E53888"/>
 
-</LinearLayout>
+                <Button
+                    android:id="@+id/btnSelectVideo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CHOOSE VIDEO FILE"
+                    android:backgroundTint="#6200EE"
+                    android:textColor="#FFFFFF" />
+
+                <EditText
+                    android:id="@+id/etArtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Art Title (e.g. Master Shading)"
+                    android:layout_marginTop="16dp"
+                    android:padding="12dp"
+                    android:background="@android:drawable/editbox_background"/>
+
+                <EditText
+                    android:id="@+id/etVideoDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Video Description / Steps"
+                    android:layout_marginTop="12dp"
+                    android:padding="12dp"
+                    android:background="@android:drawable/editbox_background"/>
+
+                <Button
+                    android:id="@+id/btnUpload"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="UPLOAD NOW"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="#E53888"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 </ScrollView>

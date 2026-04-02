@@ -7,6 +7,7 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
     <application
         android:allowBackup="true"
@@ -18,22 +19,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
-
-
+        <activity
+            android:name=".VideoPlayerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TeacherDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewUploadActivity"
+            android:exported="false" />
+         <activity
+         android:name=".teacherSignUp"
+         android:exported="false" />
+        <activity
+            android:name=".SelectionTypeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false" />
         <activity
             android:name=".AssemblageArtActivity"
             android:exported="false" />
         <activity
             android:name=".PencilArtActivity"
             android:exported="false" />
-
         <activity
             android:name=".ColorArtActivity"
             android:exported="false" />
         <activity
             android:name=".CourseActivity"
             android:exported="false" />
-
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
