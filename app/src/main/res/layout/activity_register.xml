@@ -84,7 +84,8 @@
                     android:layout_gravity="center"
                     android:text="Already have an account? Login"
                     android:textColor="#AEDEFC"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
