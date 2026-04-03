@@ -1,10 +1,19 @@
 package com.example.roohub;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class ColorArtActivity extends AppCompatActivity {
@@ -18,36 +27,106 @@ public class ColorArtActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color_art);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
 
-        // --- STEP 1: INITIALIZE UI ---
         recyclerView = findViewById(R.id.rvColorVideos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         colorVideoList = new ArrayList<>();
 
-        // --- STEP 2: LOAD DATA FROM CATEGORY KEY ---
         loadVideoData();
     }
 
     private void loadVideoData() {
-        SharedPreferences pref = getSharedPreferences("RooHubData", MODE_PRIVATE);
-        // Directly fetch the string saved for this specific category
-        String allData = pref.getString("Coloring art", "");
+        new Thread(() -> {
+            try {
+                // ── Fetch all needed fields ──────────────────────────────────
+                String urlString = SupabaseClient.SUPABASE_URL
+                        + "/rest/v1/course_uploads"
+                        + "?course_category=eq.Coloring"
+                        + "&select=teacher_name,art_name,description,video_url,teacher_email,profile_image_url";
 
-        if (!allData.isEmpty()) {
-            // Split the large string into individual records using "###"
-            String[] records = allData.split("###");
-            for (String record : records) {
-                if (!record.isEmpty()) {
-                    colorVideoList.add(record);
+                android.util.Log.d("COLOR", "Fetching: " + urlString);
+
+                URL url = new URL(urlString);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("apikey",        SupabaseClient.SUPABASE_ANON_KEY);
+                conn.setRequestProperty("Authorization", "Bearer " + SupabaseClient.SUPABASE_ANON_KEY);
+                conn.setRequestProperty("Content-Type",  "application/json");
+
+                int responseCode = conn.getResponseCode();
+                android.util.Log.d("COLOR", "Response code: " + responseCode);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        responseCode >= 200 && responseCode < 300
+                                ? conn.getInputStream()
+                                : conn.getErrorStream()
+                ));
+
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) response.append(line);
+                reader.close();
+                conn.disconnect();
+
+                android.util.Log.d("COLOR", "Response: " + response);
+
+                if (responseCode >= 200 && responseCode < 300) {
+                    JSONArray jsonArray = new JSONArray(response.toString());
+
+                    colorVideoList.clear();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+
+                        // ── Build pipe-separated string matching adapter format
+                        String teacherName    = obj.optString("teacher_name",      "Unknown");
+                        String artName        = obj.optString("art_name",          "Coloring");
+                        String desc           = obj.optString("description",       "");
+                        String videoUrl       = obj.optString("video_url",         "");
+                        String teacherEmail   = obj.optString("teacher_email",     "");
+                        String profileImgUrl  = obj.optString("profile_image_url", "");
+
+                        android.util.Log.d("COLOR", "Video URL: " + videoUrl);
+
+                        // ── Format: Name|ArtName|Desc|VideoUri|Email|ProfileImageUri
+                        String record = teacherName + "|"
+                                + artName       + "|"
+                                + desc          + "|"
+                                + videoUrl      + "|"
+                                + teacherEmail  + "|"
+                                + profileImgUrl;
+
+                        if (!videoUrl.isEmpty()) {
+                            colorVideoList.add(record);
+                        }
+                    }
+
+                    runOnUiThread(() -> {
+                        if (colorVideoList.isEmpty()) {
+                            Toast.makeText(this,
+                                    "No Coloring Art videos available yet.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        adapter = new TeacherAdapter(colorVideoList, ColorArtActivity.this);
+                        recyclerView.setAdapter(adapter);
+                    });
+
+                } else {
+                    runOnUiThread(() ->
+                            Toast.makeText(this,
+                                    "Error loading videos: " + responseCode,
+                                    Toast.LENGTH_SHORT).show()
+                    );
                 }
-            }
-        }
 
-        // --- STEP 3: SETUP ADAPTER ---
-        adapter = new TeacherAdapter(colorVideoList, this);
-        recyclerView.setAdapter(adapter);
+            } catch (Exception e) {
+                android.util.Log.e("COLOR", "Error: " + e.getMessage());
+                runOnUiThread(() ->
+                        Toast.makeText(this,
+                                "Error: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show()
+                );
+            }
+        }).start();
     }
 }
