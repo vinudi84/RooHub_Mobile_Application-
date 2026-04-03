@@ -1,21 +1,20 @@
 package com.example.roohub;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
+import androidx.media3.common.MediaItem;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.ui.PlayerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TeacherDetailActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private VideoAdapter adapter;
-    private ArrayList<VideoModel> filteredVideos;
+    private PlayerView playerView;
+    private ExoPlayer player;
+    private CircleImageView teacherImage;
+    private TextView teacherName, artName, description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,54 +25,47 @@ public class TeacherDetailActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        // --- 1. GET DATA FROM INTENT ---
-        String teacherName = getIntent().getStringExtra("teacher_name");
-        String teacherEmail = getIntent().getStringExtra("teacher_email");
-        String artName = getIntent().getStringExtra("art_name");
-        String description = getIntent().getStringExtra("description");
+        // Initialize views
+        playerView = findViewById(R.id.playerView);
+        teacherImage = findViewById(R.id.teacherImage);
+        teacherName = findViewById(R.id.teacherName);
+        artName = findViewById(R.id.artName);
+        description = findViewById(R.id.description);
+
+        // Get data from Intent
+        String name = getIntent().getStringExtra("teacher_name");
+        String art = getIntent().getStringExtra("art_name");
+        String desc = getIntent().getStringExtra("description");
         String videoUri = getIntent().getStringExtra("video_uri");
-        String teacherImage = getIntent().getStringExtra("teacher_image"); // New Image URI
+        String imageUri = getIntent().getStringExtra("teacher_image");
 
-        // --- 2. SETUP UI ELEMENTS ---
-        TextView tvName = findViewById(R.id.detailTeacherName);
-        TextView tvQual = findViewById(R.id.detailTeacherQual);
-        CircleImageView ivProfile = findViewById(R.id.detailTeacherImage);
+        // Set teacher info
+        teacherName.setText("Teacher: " + name);
+        artName.setText("Art: " + art);
+        description.setText("Description: " + desc);
 
-        tvName.setText(teacherName != null ? teacherName : "Unknown Instructor");
-        tvQual.setText(teacherEmail != null ? teacherEmail : "No Contact Info");
-
-        // --- LOAD PROFILE IMAGE ---
-        if (teacherImage != null && !teacherImage.isEmpty()) {
-            ivProfile.setImageURI(Uri.parse(teacherImage));
+        if (imageUri != null && !imageUri.isEmpty()) {
+            teacherImage.setImageURI(Uri.parse(imageUri));
         } else {
-            ivProfile.setImageResource(R.drawable.ic_launcher_background);
+            teacherImage.setImageResource(R.drawable.ic_launcher_background);
         }
 
-        recyclerView = findViewById(R.id.rvTeacherVideos);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        filteredVideos = new ArrayList<>();
+        // Initialize ExoPlayer
+        player = new ExoPlayer.Builder(this).build();
+        playerView.setPlayer(player);
 
-        if (videoUri != null && !videoUri.isEmpty()) {
-            filteredVideos.add(new VideoModel(artName, videoUri, teacherEmail));
-        }
-
-        adapter = new VideoAdapter(filteredVideos, this, model -> {
-            playVideo(model.getVideoUri());
-        });
-        recyclerView.setAdapter(adapter);
+        MediaItem mediaItem = MediaItem.fromUri(videoUri);
+        player.setMediaItem(mediaItem);
+        player.prepare();
+        player.play();
     }
 
-    private void playVideo(String uriString) {
-        if (uriString == null || uriString.isEmpty()) {
-            Toast.makeText(this, "Video link is empty", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            Intent intent = new Intent(this, VideoPlayerActivity.class);
-            intent.putExtra("video_uri", uriString);
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(this, "Error playing video: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (player != null) {
+            player.release();
+            player = null;
         }
     }
 }
