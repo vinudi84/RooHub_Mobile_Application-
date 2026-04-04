@@ -20,17 +20,32 @@
         android:theme="@style/Theme.RooHub"
         tools:targetApi="31">
         <activity
-            android:name=".VideoPlayerActivity"
+            android:name=".ManageCoursesActivity"
             android:exported="false" />
+        <activity
+            android:name=".ManageArtActivity"
+            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ManageArtAcitivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".TeacherDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".TeacherProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageVideosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VideoPlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ViewUploadActivity"
             android:exported="false" />
-         <activity
-         android:name=".teacherSignUp"
-         android:exported="false" />
+        <activity
+            android:name=".teacherSignUp"
+            android:exported="false" />
         <activity
             android:name=".SelectionTypeActivity"
             android:exported="false" />
@@ -48,6 +63,9 @@
             android:exported="false" />
         <activity
             android:name=".CourseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CourseFormActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"

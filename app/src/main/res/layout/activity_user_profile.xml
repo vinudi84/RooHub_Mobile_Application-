@@ -3,66 +3,94 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7A8C4">
+    android:background="#F7C8D9">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="30dp"
-        android:gravity="center">
+        android:padding="20dp">
 
+        <!-- Title -->
         <TextView
             android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Your Profile"
-            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:text="Artist Profile"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#AC1754"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="16dp"/>
 
+        <!-- Profile Image -->
         <androidx.cardview.widget.CardView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            app:cardCornerRadius="60dp">
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="4dp">
+
             <ImageView
                 android:id="@+id/imgShowProfile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@android:drawable/ic_menu_camera" />
+                android:src="@android:drawable/ic_menu_gallery"/>
+
         </androidx.cardview.widget.CardView>
 
-        <EditText android:id="@+id/edtEmail"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:hint="Email" android:layout_marginTop="25dp"
-            android:background="#FFFFFF" android:padding="12dp"/>
+        <!-- Artist Name -->
+        <TextView
+            android:id="@+id/txtArtistName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Artist Name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp"/>
 
-        <EditText android:id="@+id/edtPass"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:hint="Password" android:layout_marginTop="10dp"
-            android:background="#FFFFFF" android:padding="12dp"
-            android:inputType="textPassword"/>
+        <!-- Artist Email -->
+        <TextView
+            android:id="@+id/txtArtistEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="email@example.com"
+            android:textSize="14sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="8dp"/>
 
-        <!-- These are the buttons that will be hidden in VIEW_ONLY mode -->
-        <Button android:id="@+id/btnUpdate"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Save Changes" android:layout_marginTop="20dp"
-            android:backgroundTint="#AC1754" android:textColor="#FFFFFF"/>
+        <!-- Artist Bio -->
+        <TextView
+            android:id="@+id/txtArtistBio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No bio yet."
+            android:textSize="14sp"
+            android:textColor="#555555"
+            android:padding="8dp"
+            android:layout_marginBottom="20dp"/>
 
-        <Button android:id="@+id/btnBack"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Cancel" android:layout_marginTop="5dp"
-            android:backgroundTint="#E53888" android:textColor="#FFFFFF"/>
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:backgroundTint="#AC1754"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="20dp"/>
 
-        <!-- Container where artworks will be listed -->
+        <!-- Artworks List -->
         <LinearLayout
             android:id="@+id/artListLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp"/>
+            android:orientation="vertical"/>
 
     </LinearLayout>
 </ScrollView>

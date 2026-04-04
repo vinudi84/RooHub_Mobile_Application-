@@ -56,27 +56,6 @@
                     android:background="#E53888"/>
             </androidx.cardview.widget.CardView>
 
-            <!-- User Inputs -->
-            <EditText
-                android:id="@+id/etUserEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email Address"
-                android:layout_marginTop="20dp"
-                android:padding="12dp"
-                android:background="#FAD1E0"
-                android:inputType="textEmailAddress" />
-
-            <EditText
-                android:id="@+id/etUserPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Password"
-                android:layout_marginTop="10dp"
-                android:padding="12dp"
-                android:background="#FAD1E0"
-                android:inputType="textPassword" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"

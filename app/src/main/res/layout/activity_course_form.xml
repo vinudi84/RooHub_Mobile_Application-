@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7C8D9">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Header Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#F37199"
+            android:padding="25dp"
+            android:elevation="8dp"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload Course Content"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#AC1754"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Share your course materials and artworks"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Form Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="#FFFFFF">
+
+                <!-- Course Name Input -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Course Name"
+                    android:textStyle="bold"
+                    android:textColor="#AC1754"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etCourseName"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Enter course name"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:background="@drawable/edit_text_background"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="#333333"
+                    android:textColorHint="#999999" />
+
+                <!-- Course Category (Spinner) -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Course Category"
+                    android:textStyle="bold"
+                    android:textColor="#AC1754"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerCourseCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/edit_text_background"
+                    android:layout_marginBottom="20dp"
+                    android:padding="12dp" />
+
+                <!-- Course Description -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:textStyle="bold"
+                    android:textColor="#AC1754"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etCourseDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:hint="Enter course description"
+                    android:inputType="textMultiLine"
+                    android:padding="12dp"
+                    android:background="@drawable/edit_text_background"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="#333333"
+                    android:textColorHint="#999999"
+                    android:gravity="top" />
+
+                <!-- Course Video Selection -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Course Video"
+                    android:textStyle="bold"
+                    android:textColor="#AC1754"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="14sp" />
+
+                <!-- Video Preview -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="#F0F0F0"
+                    android:gravity="center"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@android:drawable/ic_media_play"
+                        android:scaleType="centerInside"
+                        android:tint="#E91E63" />
+
+                    <TextView
+                        android:id="@+id/tvVideoFileName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No video selected"
+                        android:textColor="#999999"
+                        android:textSize="12sp"
+                        android:layout_marginTop="10dp" />
+
+                </LinearLayout>
+
+                <!-- Select Video Button -->
+                <Button
+                    android:id="@+id/btnSelectVideo"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Select Video"
+                    android:backgroundTint="#E91E63"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="20dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:spacing="10dp">
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="Cancel"
+                android:backgroundTint="#999999"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_marginEnd="10dp" />
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="Submit Course"
+                android:backgroundTint="#AC1754"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

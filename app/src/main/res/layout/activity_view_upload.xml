@@ -11,6 +11,32 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Instructor Dashboard"
+                android:textColor="#AC1754"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"/>
+
+            <ImageButton
+                android:id="@+id/btnTeacherProfile"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_teacher_profile"
+                app:tint="#AC1754" />
+        </RelativeLayout>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +55,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Instructor Profile"
+                    android:text="Your Profile Info"
                     android:textColor="#AC1754"
                     android:textStyle="bold"
                     android:textSize="14sp"

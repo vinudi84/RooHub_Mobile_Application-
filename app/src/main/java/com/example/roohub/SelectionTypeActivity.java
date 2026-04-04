@@ -37,13 +37,14 @@ public class SelectionTypeActivity extends AppCompatActivity {
         // Teacher Button Click Logic
         if (btnTeacher != null) {
             btnTeacher.setOnClickListener(v -> {
-                Intent intent = new Intent(SelectionTypeActivity.this, teacherSignUp.class);
+                Intent intent = new Intent(SelectionTypeActivity.this, CourseFormActivity.class);
                 startActivity(intent);
             });
         }
 
         // Artist Button Click Logic
         if (btnArtist != null) {
+
             btnArtist.setOnClickListener(v -> {
                 Intent intent = new Intent(SelectionTypeActivity.this, UploadActivity.class);
                 startActivity(intent);

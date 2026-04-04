@@ -6,6 +6,10 @@ import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * CourseActivity - Displays available courses
+ * When a course is clicked, opens CourseFormActivity for upload
+ */
 public class CourseActivity extends AppCompatActivity {
 
     @Override
@@ -17,7 +21,7 @@ public class CourseActivity extends AppCompatActivity {
         Button btnColorArt = findViewById(R.id.btnColorArt);
         Button btnAssemblageArt = findViewById(R.id.btnAssemblageArt);
 
-        // Pencil Art Button Click
+        // Pencil Art Button Click - Open form to upload Pencil Art course
         btnPencilArt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -26,7 +30,7 @@ public class CourseActivity extends AppCompatActivity {
             }
         });
 
-        // Coloring Button Click
+        // Coloring Button Click - Open form to upload Coloring course
         btnColorArt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,11 +39,10 @@ public class CourseActivity extends AppCompatActivity {
             }
         });
 
-        // Assemblage Art Button Click
+        // Assemblage Art Button Click - Open form to upload Assemblage Art course
         btnAssemblageArt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //  Replace Animation Activity with new name here
                 Intent intent = new Intent(CourseActivity.this, AssemblageArtActivity.class);
                 startActivity(intent);
             }
