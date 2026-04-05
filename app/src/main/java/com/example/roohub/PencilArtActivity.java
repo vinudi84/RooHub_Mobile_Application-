@@ -2,6 +2,7 @@ package com.example.roohub;
 
 import android.os.Bundle;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,12 +40,13 @@ public class PencilArtActivity extends AppCompatActivity {
     private void loadVideoData() {
         new Thread(() -> {
             try {
+                // 1. Added 'is_active' column to the selection query
                 String urlString = SupabaseClient.SUPABASE_URL
                         + "/rest/v1/course_uploads"
                         + "?course_category=eq.Pencil Art"
-                        + "&select=teacher_name,art_name,description,video_url,teacher_email,profile_image_url";
+                        + "&select=teacher_name,art_name,description,video_url,teacher_email,profile_image_url,is_active";
 
-                android.util.Log.d("PENCIL", "Fetching: " + urlString);
+                Log.d("PENCIL", "Fetching: " + urlString);
 
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -54,7 +56,7 @@ public class PencilArtActivity extends AppCompatActivity {
                 conn.setRequestProperty("Content-Type",  "application/json");
 
                 int responseCode = conn.getResponseCode();
-                android.util.Log.d("PENCIL", "Response code: " + responseCode);
+                Log.d("PENCIL", "Response code: " + responseCode);
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
                         responseCode >= 200 && responseCode < 300
@@ -68,42 +70,44 @@ public class PencilArtActivity extends AppCompatActivity {
                 reader.close();
                 conn.disconnect();
 
-                android.util.Log.d("PENCIL", "Response: " + response);
-
                 if (responseCode >= 200 && responseCode < 300) {
                     JSONArray jsonArray = new JSONArray(response.toString());
-
                     pencilVideoList.clear();
+
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
 
-                        String teacherName   = obj.optString("teacher_name",      "Unknown");
-                        String artName       = obj.optString("art_name",          "Pencil Art");
-                        String desc          = obj.optString("description",       "");
-                        String videoUrl      = obj.optString("video_url",         "");
-                        String teacherEmail  = obj.optString("teacher_email",     "");
-                        String profileImgUrl = obj.optString("profile_image_url", "");
+                        // 2. Retrieve the 'is_active' value (Defaults to true if missing)
+                        boolean isActive = obj.optBoolean("is_active", true);
 
-                        android.util.Log.d("PENCIL", "Video URL: " + videoUrl);
+                        // 3. Add to the list ONLY if the record is ACTIVE
+                        if (isActive) {
+                            String teacherName   = obj.optString("teacher_name",      "Unknown");
+                            String artName       = obj.optString("art_name",          "Pencil Art");
+                            String desc          = obj.optString("description",       "");
+                            String videoUrl      = obj.optString("video_url",         "");
+                            String teacherEmail  = obj.optString("teacher_email",     "");
+                            String profileImgUrl = obj.optString("profile_image_url", "");
 
-                        // ── Format: Name|ArtName|Desc|VideoUri|Email|ProfileImageUri
-                        String record = teacherName  + "|"
-                                + artName       + "|"
-                                + desc          + "|"
-                                + videoUrl      + "|"
-                                + teacherEmail  + "|"
-                                + profileImgUrl;
+                            Log.d("PENCIL", "Video URL: " + videoUrl);
 
-                        if (!videoUrl.isEmpty()) {
-                            pencilVideoList.add(record);
+                            // Format: Name|ArtName|Desc|VideoUri|Email|ProfileImageUri
+                            String record = teacherName  + "|"
+                                    + artName       + "|"
+                                    + desc          + "|"
+                                    + videoUrl      + "|"
+                                    + teacherEmail  + "|"
+                                    + profileImgUrl;
+
+                            if (!videoUrl.isEmpty()) {
+                                pencilVideoList.add(record);
+                            }
                         }
                     }
 
                     runOnUiThread(() -> {
                         if (pencilVideoList.isEmpty()) {
-                            Toast.makeText(this,
-                                    "No Pencil Art videos available yet.",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "No active Pencil Art videos available.", Toast.LENGTH_SHORT).show();
                         }
                         adapter = new TeacherAdapter(pencilVideoList, PencilArtActivity.this);
                         recyclerView.setAdapter(adapter);
@@ -111,18 +115,14 @@ public class PencilArtActivity extends AppCompatActivity {
 
                 } else {
                     runOnUiThread(() ->
-                            Toast.makeText(this,
-                                    "Error loading videos: " + responseCode,
-                                    Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Error loading: " + responseCode, Toast.LENGTH_SHORT).show()
                     );
                 }
 
             } catch (Exception e) {
-                android.util.Log.e("PENCIL", "Error: " + e.getMessage());
+                Log.e("PENCIL", "Error: " + e.getMessage());
                 runOnUiThread(() ->
-                        Toast.makeText(this,
-                                "Error: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show()
                 );
             }
         }).start();

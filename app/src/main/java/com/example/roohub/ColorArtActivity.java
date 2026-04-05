@@ -39,11 +39,11 @@ public class ColorArtActivity extends AppCompatActivity {
     private void loadVideoData() {
         new Thread(() -> {
             try {
-                // ── Fetch all needed fields ──────────────────────────────────
+                // ── Added 'is_active' column to the URL query ──────────────────────
                 String urlString = SupabaseClient.SUPABASE_URL
                         + "/rest/v1/course_uploads"
                         + "?course_category=eq.Coloring"
-                        + "&select=teacher_name,art_name,description,video_url,teacher_email,profile_image_url";
+                        + "&select=teacher_name,art_name,description,video_url,teacher_email,profile_image_url,is_active";
 
                 android.util.Log.d("COLOR", "Fetching: " + urlString);
 
@@ -78,33 +78,38 @@ public class ColorArtActivity extends AppCompatActivity {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
 
-                        // ── Build pipe-separated string matching adapter format
-                        String teacherName    = obj.optString("teacher_name",      "Unknown");
-                        String artName        = obj.optString("art_name",          "Coloring");
-                        String desc           = obj.optString("description",       "");
-                        String videoUrl       = obj.optString("video_url",         "");
-                        String teacherEmail   = obj.optString("teacher_email",     "");
-                        String profileImgUrl  = obj.optString("profile_image_url", "");
+                        // 1. Check the status (Defaults to true if column is missing)
+                        boolean isActive = obj.optBoolean("is_active", true);
 
-                        android.util.Log.d("COLOR", "Video URL: " + videoUrl);
+                        // 2. Add data only if the course is Active
+                        if (isActive) {
+                            String teacherName    = obj.optString("teacher_name",      "Unknown");
+                            String artName        = obj.optString("art_name",          "Coloring");
+                            String desc           = obj.optString("description",       "");
+                            String videoUrl       = obj.optString("video_url",         "");
+                            String teacherEmail   = obj.optString("teacher_email",     "");
+                            String profileImgUrl  = obj.optString("profile_image_url", "");
 
-                        // ── Format: Name|ArtName|Desc|VideoUri|Email|ProfileImageUri
-                        String record = teacherName + "|"
-                                + artName       + "|"
-                                + desc          + "|"
-                                + videoUrl      + "|"
-                                + teacherEmail  + "|"
-                                + profileImgUrl;
+                            android.util.Log.d("COLOR", "Video URL: " + videoUrl);
 
-                        if (!videoUrl.isEmpty()) {
-                            colorVideoList.add(record);
+                            // Format: Name|ArtName|Desc|VideoUri|Email|ProfileImageUri
+                            String record = teacherName + "|"
+                                    + artName       + "|"
+                                    + desc          + "|"
+                                    + videoUrl      + "|"
+                                    + teacherEmail  + "|"
+                                    + profileImgUrl;
+
+                            if (!videoUrl.isEmpty()) {
+                                colorVideoList.add(record);
+                            }
                         }
                     }
 
                     runOnUiThread(() -> {
                         if (colorVideoList.isEmpty()) {
                             Toast.makeText(this,
-                                    "No Coloring Art videos available yet.",
+                                    "No active Coloring Art videos available yet.",
                                     Toast.LENGTH_SHORT).show();
                         }
                         adapter = new TeacherAdapter(colorVideoList, ColorArtActivity.this);

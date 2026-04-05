@@ -39,10 +39,11 @@ public class AssemblageArtActivity extends AppCompatActivity {
     private void loadVideoData() {
         new Thread(() -> {
             try {
+                // ── Added the 'is_active' column to the URL query ──────────────────────
                 String urlString = SupabaseClient.SUPABASE_URL
                         + "/rest/v1/course_uploads"
                         + "?course_category=eq.Assemblage Art"
-                        + "&select=teacher_name,art_name,description,video_url,teacher_email,profile_image_url";
+                        + "&select=teacher_name,art_name,description,video_url,teacher_email,profile_image_url,is_active";
 
                 android.util.Log.d("ASSEMBLAGE", "Fetching: " + urlString);
 
@@ -77,32 +78,38 @@ public class AssemblageArtActivity extends AppCompatActivity {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
 
-                        String teacherName   = obj.optString("teacher_name",      "Unknown");
-                        String artName       = obj.optString("art_name",          "Assemblage Art");
-                        String desc          = obj.optString("description",       "");
-                        String videoUrl      = obj.optString("video_url",         "");
-                        String teacherEmail  = obj.optString("teacher_email",     "");
-                        String profileImgUrl = obj.optString("profile_image_url", "");
+                        // 1. Check the status (Defaults to true if not found)
+                        boolean isActive = obj.optBoolean("is_active", true);
 
-                        android.util.Log.d("ASSEMBLAGE", "Video URL: " + videoUrl);
+                        // 2. Add to list only if isActive is true
+                        if (isActive) {
+                            String teacherName   = obj.optString("teacher_name",      "Unknown");
+                            String artName       = obj.optString("art_name",          "Assemblage Art");
+                            String desc          = obj.optString("description",       "");
+                            String videoUrl      = obj.optString("video_url",         "");
+                            String teacherEmail  = obj.optString("teacher_email",     "");
+                            String profileImgUrl = obj.optString("profile_image_url", "");
 
-                        // ── Format: Name|ArtName|Desc|VideoUri|Email|ProfileImageUri
-                        String record = teacherName  + "|"
-                                + artName       + "|"
-                                + desc          + "|"
-                                + videoUrl      + "|"
-                                + teacherEmail  + "|"
-                                + profileImgUrl;
+                            android.util.Log.d("ASSEMBLAGE", "Video URL: " + videoUrl);
 
-                        if (!videoUrl.isEmpty()) {
-                            assVideoList.add(record);
+                            // Format: Name|ArtName|Desc|VideoUri|Email|ProfileImageUri
+                            String record = teacherName  + "|"
+                                    + artName       + "|"
+                                    + desc          + "|"
+                                    + videoUrl      + "|"
+                                    + teacherEmail  + "|"
+                                    + profileImgUrl;
+
+                            if (!videoUrl.isEmpty()) {
+                                assVideoList.add(record);
+                            }
                         }
                     }
 
                     runOnUiThread(() -> {
                         if (assVideoList.isEmpty()) {
                             Toast.makeText(this,
-                                    "No Assemblage Art videos available yet.",
+                                    "No active Assemblage Art videos available yet.",
                                     Toast.LENGTH_SHORT).show();
                         }
                         adapter = new TeacherAdapter(assVideoList, AssemblageArtActivity.this);
