@@ -14,8 +14,6 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.imageview.ShapeableImageView;
-
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -33,6 +31,7 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the teacher_item layout for each row
         View view = LayoutInflater.from(context).inflate(R.layout.teacher_item, parent, false);
         return new ViewHolder(view);
     }
@@ -43,28 +42,41 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.ViewHold
 
         if (record == null || record.isEmpty()) return;
 
-        // ── Format: Name|ArtName|Desc|VideoUri|Email|ProfileImageUri ─────────
-        String[] details = record.split("\\|", -1); // -1 keeps empty trailing fields
+        // Split data by pipe symbol: Name|ArtName|Desc|VideoUri|Email|ProfileImageUri
+        String[] details = record.split("\\|", -1);
 
-        String teacherName   = details.length > 0 ? details[0] : "Unknown";
-        String artName       = details.length > 1 ? details[1] : "";
+        // --- 1. Handle Teacher Name Logic ---
+        String rawName = details.length > 0 ? details[0] : "";
+        String teacherName;
+        if (rawName == null || rawName.trim().isEmpty() || rawName.equalsIgnoreCase("null")) {
+            teacherName = "Anonymous";
+        } else {
+            teacherName = rawName;
+        }
+
+        // Handle Art Name Logic (NEW)
+        // If the art name is null, empty, or literally "null", set it to "General Art"
+        String rawArtName = details.length > 1 ? details[1] : "";
+        String artName;
+        if (rawArtName == null || rawArtName.trim().isEmpty() || rawArtName.equalsIgnoreCase("null")) {
+            artName = "General Art";
+        } else {
+            artName = rawArtName;
+        }
+
         String description   = details.length > 2 ? details[2] : "";
         String videoUri      = details.length > 3 ? details[3] : "";
         String teacherEmail  = details.length > 4 ? details[4] : "";
         String profileImgUri = details.length > 5 ? details[5] : "";
 
-        android.util.Log.d("ADAPTER", "Binding position " + position);
-        android.util.Log.d("ADAPTER", "Teacher: " + teacherName);
-        android.util.Log.d("ADAPTER", "Video: "   + videoUri);
-
+        // Set the cleaned text data to the views
         holder.name.setText("Teacher: " + teacherName);
         holder.qual.setText("Art: "     + artName);
         holder.email.setText("Desc: "   + description);
 
-        // ── Load profile image ───────────────────────────────────────────────
+        // Load profile image using Glide (for URLs) or Uri (for local files)
         if (!profileImgUri.isEmpty()) {
             try {
-                // Try as URL first (Supabase storage URL)
                 if (profileImgUri.startsWith("http")) {
                     com.bumptech.glide.Glide.with(context)
                             .load(profileImgUri)
@@ -81,13 +93,13 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.ViewHold
             holder.image.setImageResource(R.drawable.ic_launcher_background);
         }
 
-        // ── Release old player if any ────────────────────────────────────────
+        // Release any existing player to free up memory before creating a new one
         if (holder.player != null) {
             holder.player.release();
             holder.player = null;
         }
 
-        // ── Setup ExoPlayer for video ────────────────────────────────────────
+        // Setup ExoPlayer for video content
         if (!videoUri.isEmpty()) {
             try {
                 ExoPlayer player = new ExoPlayer.Builder(context).build();
@@ -97,19 +109,18 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.ViewHold
                 MediaItem mediaItem = MediaItem.fromUri(videoUri);
                 player.setMediaItem(mediaItem);
                 player.prepare();
-                // ✅ Don't autoplay — let user press play
+                // We keep autoplay off (false) so it doesn't slow down the list scrolling
                 player.setPlayWhenReady(false);
 
-                android.util.Log.d("ADAPTER", "Player set up for: " + videoUri);
             } catch (Exception e) {
                 android.util.Log.e("ADAPTER", "Player error: " + e.getMessage());
             }
         } else {
+            // Hide player view if there is no video link
             holder.playerView.setVisibility(View.GONE);
-            android.util.Log.w("ADAPTER", "Empty video URI at position " + position);
         }
 
-        // ── Click to open detail screen ──────────────────────────────────────
+        // Open Detail Activity when the whole item is clicked
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, TeacherDetailActivity.class);
             intent.putExtra("teacher_name",  teacherName);
@@ -122,7 +133,7 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.ViewHold
         });
     }
 
-    // ── Release player when view is recycled ─────────────────────────────────
+    // Release the player when the view is scrolled away to prevent memory leaks
     @Override
     public void onViewRecycled(@NonNull ViewHolder holder) {
         super.onViewRecycled(holder);
@@ -137,11 +148,12 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.ViewHold
         return videoDataList.size();
     }
 
+    // ViewHolder class to map UI elements from the XML layout
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView image;
         TextView name, qual, email;
         PlayerView playerView;
-        ExoPlayer player; // ✅ keep reference for proper release
+        ExoPlayer player;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
