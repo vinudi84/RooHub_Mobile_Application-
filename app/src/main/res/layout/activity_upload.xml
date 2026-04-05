@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7C8D9"> <!-- Background color poddak change kala lassanata -->
+    android:background="#F7C8D9">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Custom Top Navigation -->
+        <!-- Profile Button -->
         <Button
             android:id="@+id/btnGoToProfile"
             android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
             android:text="Your Profile"
             android:backgroundTint="#AC1754"
             android:layout_gravity="end"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="15dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,6 +29,7 @@
             android:padding="25dp"
             android:elevation="8dp">
 
+            <!-- Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,15 +38,14 @@
                 android:textStyle="bold"
                 android:textColor="#AC1754"
                 android:layout_gravity="center"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp" />
 
-            <!-- Profile Picture (Circular) -->
+            <!-- Profile Image -->
             <androidx.cardview.widget.CardView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                app:cardCornerRadius="50dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="50dp">
 
                 <ImageView
                     android:id="@+id/profilePreview"
@@ -53,43 +53,65 @@
                     android:layout_height="match_parent"
                     android:src="@android:drawable/ic_menu_camera"
                     android:scaleType="centerCrop"
-                    android:background="#E53888"/>
+                    android:contentDescription="Profile Image" />
             </androidx.cardview.widget.CardView>
 
+            <!-- Spinner Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Artist Type"
+                android:textStyle="bold"
+                android:textColor="#AC1754"
+                android:layout_marginTop="15dp" />
+
+            <!-- Spinner -->
+            <Spinner
+                android:id="@+id/spinnerArtistType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FAD1E0"
+                android:layout_marginTop="8dp" />
+
+            <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="#AC1754"
-                android:layout_marginVertical="20dp"/>
+                android:layout_marginVertical="20dp" />
 
-            <!-- Art Upload Section -->
+            <!-- Upload Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Upload Your Art"
                 android:textStyle="bold"
-                android:textColor="#AC1754"/>
+                android:textColor="#AC1754" />
 
+            <!-- Art Name -->
             <EditText
                 android:id="@+id/etArtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Art Name"
+                android:background="#FAD1E0"
                 android:layout_marginTop="10dp"
-                android:padding="12dp"
-                android:background="#FAD1E0" />
+                android:inputType="text"
+                android:autofillHints="name" />
 
+            <!-- Description -->
             <EditText
                 android:id="@+id/etDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Short Description"
-                android:layout_marginTop="10dp"
-                android:padding="12dp"
                 android:background="#FAD1E0"
-                android:minLines="2" />
+                android:layout_marginTop="10dp"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:autofillHints="text" />
 
-            <!-- Art Image Box -->
+            <!-- Art Image -->
             <ImageView
                 android:id="@+id/artImagePreview"
                 android:layout_width="match_parent"
@@ -97,7 +119,8 @@
                 android:layout_marginTop="15dp"
                 android:background="#E53888"
                 android:src="@android:drawable/ic_menu_gallery"
-                android:scaleType="centerInside" />
+                android:scaleType="centerInside"
+                android:contentDescription="Art Image" />
 
             <!-- Save Button -->
             <Button
@@ -106,8 +129,7 @@
                 android:layout_height="wrap_content"
                 android:text="Save &amp; Go to Home"
                 android:layout_marginTop="25dp"
-                android:backgroundTint="#AC1754"
-                android:textColor="#FFFFFF" />
+                android:backgroundTint="#AC1754" />
 
         </LinearLayout>
     </LinearLayout>
